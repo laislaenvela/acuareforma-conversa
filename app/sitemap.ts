@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { articles, chapters, themes } from "./data/proposal";
+import { articles, chapters, themes } from "./data/proposal.mock";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://acuareforma.local";

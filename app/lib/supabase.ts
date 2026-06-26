@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import type { ArticuloDB, CapituloDB } from "./types";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -9,67 +10,103 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Type for articles from Supabase
-export interface ArticleDB {
-  id: number;
-  title: string;
-  chapter_id: number;
-  current_text: string;
-  proposed_text: string;
-  rationale: string;
-  community_question: string;
-  created_at?: string;
-  updated_at?: string;
-}
+// ============================================================
+// ARTICULOS
+// ============================================================
 
-// Function to fetch all articles from Supabase
-export async function fetchArticles(): Promise<ArticleDB[]> {
+/**
+ * Obtiene todos los artículos ordenados por ID
+ */
+export async function fetchArticulos(): Promise<ArticuloDB[]> {
   const { data, error } = await supabase
-    .from("articles")
+    .from("articulos")
     .select("*")
     .order("id", { ascending: true });
 
   if (error) {
-    console.error("Error fetching articles:", error);
+    console.error("Error fetching articulos:", error);
     throw error;
   }
 
   return data || [];
 }
 
-// Function to fetch a single article by ID
-export async function fetchArticleById(id: number): Promise<ArticleDB | null> {
+/**
+ * Obtiene un artículo específico por ID
+ */
+export async function fetchArticuloById(id: number): Promise<ArticuloDB | null> {
   const { data, error } = await supabase
-    .from("articles")
+    .from("articulos")
     .select("*")
     .eq("id", id)
     .single();
 
   if (error) {
-    console.error(`Error fetching article ${id}:`, error);
+    console.error(`Error fetching articulo ${id}:`, error);
     return null;
   }
 
   return data;
 }
 
-// Function to fetch articles by chapter ID
-export async function fetchArticlesByChapter(
-  chapterId: number
-): Promise<ArticleDB[]> {
+/**
+ * Obtiene todos los artículos de un capítulo específico
+ */
+export async function fetchArticulosByCapitulo(
+  capituloId: number
+): Promise<ArticuloDB[]> {
   const { data, error } = await supabase
-    .from("articles")
+    .from("articulos")
     .select("*")
-    .eq("chapter_id", chapterId)
+    .eq("capitulo_id", capituloId)
     .order("id", { ascending: true });
 
   if (error) {
     console.error(
-      `Error fetching articles for chapter ${chapterId}:`,
+      `Error fetching articulos for capitulo ${capituloId}:`,
       error
     );
     return [];
   }
 
   return data || [];
+}
+
+// ============================================================
+// CAPITULOS
+// ============================================================
+
+/**
+ * Obtiene todos los capítulos ordenados por orden
+ */
+export async function fetchCapitulos(): Promise<CapituloDB[]> {
+  const { data, error } = await supabase
+    .from("capitulos")
+    .select("*")
+    .order("orden", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching capitulos:", error);
+    throw error;
+  }
+
+  return data || [];
+}
+
+/**
+ * Obtiene un capítulo específico por ID
+ */
+export async function fetchCapituloById(id: number): Promise<CapituloDB | null> {
+  const { data, error } = await supabase
+    .from("capitulos")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching capitulo ${id}:`, error);
+    return null;
+  }
+
+  return data;
 }

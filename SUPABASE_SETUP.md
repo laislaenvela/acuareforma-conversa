@@ -1,4 +1,36 @@
-# Guía de Integración con Supabase
+# Guía de Integración con Supabase - Estructura Normalizada
+
+## 📋 Estructura de Base de Datos
+
+El proyecto utiliza dos tablas principales normalizadas:
+
+### Tabla: `capitulos`
+```sql
+id              (SERIAL PRIMARY KEY)
+codigo          (VARCHAR) - Ej: "I", "II", "III"
+orden           (INTEGER) - Orden de visualización
+nombre_vigente  (VARCHAR) - Nombre actual
+nombre_propuesto(VARCHAR) - Nombre propuesto
+slug            (VARCHAR) - URL-friendly identifier
+created_at      (TIMESTAMP)
+updated_at      (TIMESTAMP)
+```
+
+### Tabla: `articulos`
+```sql
+id              (SERIAL PRIMARY KEY)
+capitulo_id     (INTEGER FOREIGN KEY → capitulos.id)
+numero          (INTEGER) - Número del artículo
+titulo          (VARCHAR) - Título
+texto_vigente   (TEXT) - Texto actual
+texto_propuesto (TEXT) - Texto propuesto
+discusion       (TEXT) - Discusión (opcional)
+justificacion   (TEXT) - Justificación del cambio
+pregunta        (TEXT) - Pregunta para la comunidad
+estado          (VARCHAR) - Estado (active, draft, etc.)
+created_at      (TIMESTAMP)
+updated_at      (TIMESTAMP)
+```
 
 ## 1. Crear Proyecto en Supabase
 
@@ -6,18 +38,24 @@
 2. Crea un nuevo proyecto
 3. Espera a que se complete la inicialización
 
-## 2. Crear Tabla de Artículos
+## 2. Crear Tablas
 
-En el editor SQL de Supabase, ejecuta el siguiente comando para crear la tabla:
+En el editor SQL de Supabase, ejecuta:
 
+### Tabla capitulos
 ```sql
-CREATE TABLE articles (
+CREATE TABLE capitulos (
   id SERIAL PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
-  chapter_id INTEGER NOT NULL,
-  current_text TEXT NOT NULL,
-  proposed_text TEXT NOT NULL,
-  rationale TEXT NOT NULL,
+  codigo VARCHAR(10) NOT NULL,
+  orden INTEGER NOT NULL,
+  nombre_vigente VARCHAR(255) NOT NULL,
+  nombre_propuesto VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_capitulos_orden ON capitulos(orden);
   community_question TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

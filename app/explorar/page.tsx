@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getChapters } from "../lib/data";
-import { themes, chapters as defaultChapters } from "../data/proposal";
+import { themes, chapters as defaultChapters } from "../data/proposal.mock";
 
 export default function ExplorarPage() {
   const [view, setView] = useState("chapters");

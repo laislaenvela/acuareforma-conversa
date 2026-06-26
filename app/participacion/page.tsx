@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
-import { articles } from "../data/proposal";
+import { articles } from "../data/proposal.mock";
 import type { Participant, Contribution } from "../lib/types";
 import { 
   getParticipant, 

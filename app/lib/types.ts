@@ -1,12 +1,61 @@
+// ============================================================
+// INTERFAZ INTERNA (normalizada para la aplicación)
+// ============================================================
 export type Article = {
   id: number;
   title: string;
   chapterId: number;
+  numero: number;
   currentText: string;
   proposedText: string;
   rationale: string;
   communityQuestion: string;
+  status: string;
 };
+
+export type Chapter = {
+  id: number;
+  codigo: string;
+  orden: number;
+  nombre_vigente: string;
+  nombre_propuesto: string;
+  slug: string;
+  // Propiedades derivadas para compatibilidad con plantillas
+  number: string; // Ej: "I", "II", etc.
+  title: string; // nombre_propuesto
+  summary?: string;
+  previousTitle?: string;
+  articles?: { id: number; title: string }[];
+};
+
+// ============================================================
+// INTERFACES DE BASE DE DATOS (directas de Supabase)
+// ============================================================
+export interface ArticuloDB {
+  id: number;
+  capitulo_id: number;
+  numero: number;
+  titulo: string;
+  texto_vigente: string;
+  texto_propuesto: string;
+  discusion?: string;
+  justificacion: string;
+  pregunta: string;
+  estado: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CapituloDB {
+  id: number;
+  codigo: string;
+  orden: number;
+  nombre_vigente: string;
+  nombre_propuesto: string;
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 export type Participant = {
   fullName: string;

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
-import { articles } from "./data/proposal";
+import { articles } from "./data/proposal.mock";
 import Link from "next/link";
 import type { Contribution } from "./lib/types";
 import { getContributions } from "./lib/storage";
