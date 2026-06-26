@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ParticipationGate from "../../../components/ParticipationGate";
-import { articles, chapters } from "../../data/proposal";
+import { getArticles, getArticleById, getChapters } from "../../lib/data";
 import type { Metadata } from "next";
 import { createArticleMetadata } from "../../lib/metadata";
 
@@ -11,6 +11,7 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+  const articles = await getArticles();
   return articles.map((article) => ({
     id: article.id.toString(),
   }));
@@ -20,7 +21,7 @@ export const revalidate = 3600; // Revalidate every hour
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const article = articles.find((a) => a.id === Number(id));
+  const article = await getArticleById(Number(id));
 
   if (!article) {
     return {
@@ -35,9 +36,7 @@ export default async function ArticuloPage({
   params,
 }: Props) {
   const { id } = await params;
-  const article = articles.find(
-  (a) => a.id === Number(id)
-);
+  const article = await getArticleById(Number(id));
 
 if (!article) {
   return (
@@ -47,9 +46,11 @@ if (!article) {
   );
 }
 
+const chapters = getChapters();
 const chapter = chapters.find(
   (c) => c.id === article.chapterId
 );
+const articles = await getArticles();
 const articleIndex = articles.findIndex(
   (a) => a.id === article.id
 );

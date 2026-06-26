@@ -1,11 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { themes, chapters } from "../data/proposal";
+import { getChapters } from "../lib/data";
+import { themes, chapters as defaultChapters } from "../data/proposal";
 
 export default function ExplorarPage() {
   const [view, setView] = useState("chapters");
+  const [chapters, setChapters] = useState(defaultChapters);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadChapters = async () => {
+      try {
+        const loadedChapters = getChapters();
+        setChapters(loadedChapters);
+      } catch (error) {
+        console.error("Error loading chapters:", error);
+        // Keep default chapters on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadChapters();
+  }, []);
 
   return (
     <main className="mx-auto max-w-6xl p-8">

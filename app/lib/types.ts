@@ -1,3 +1,13 @@
+export type Article = {
+  id: number;
+  title: string;
+  chapterId: number;
+  currentText: string;
+  proposedText: string;
+  rationale: string;
+  communityQuestion: string;
+};
+
 export type Participant = {
   fullName: string;
   userNumber: string;
