@@ -17,6 +17,21 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+function logSupabaseError(context: string, error: {
+  message?: string;
+  code?: string;
+  details?: string;
+  hint?: string;
+}): void {
+  console.error(context, {
+    message: error.message,
+    code: error.code,
+    details: error.details,
+    hint: error.hint,
+    error,
+  });
+}
+
 // ============================================================
 // ARTICULOS
 // ============================================================
@@ -186,7 +201,7 @@ export async function createParticipante(
     .single();
 
   if (error) {
-    console.error("Error creating participante:", error);
+    logSupabaseError("Error creating participante:", error);
     throw error;
   }
 
@@ -207,7 +222,7 @@ export async function createAporte(
     .single();
 
   if (error) {
-    console.error("Error creating aporte:", error);
+    logSupabaseError("Error creating aporte:", error);
     throw error;
   }
 
