@@ -11,21 +11,23 @@ export default function ExplorarPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadChapters = async () => {
-      try {
-        const loadedChapters = getChapters();
-        setChapters(loadedChapters);
-      } catch (error) {
-        console.error("Error loading chapters:", error);
-        // Keep default chapters on error
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadChapters = async () => {
+    try {
+      const loadedChapters = await getChapters();
 
-    loadChapters();
-  }, []);
+alert(JSON.stringify(loadedChapters, null, 2));
 
+setChapters(loadedChapters);
+    } catch (error) {
+      console.error("Error loading chapters:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadChapters();
+}, []);
+console.log(chapters);
   return (
     <main className="mx-auto max-w-6xl p-8">
       <h1 className="text-4xl font-bold">

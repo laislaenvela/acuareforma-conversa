@@ -1,4 +1,8 @@
-import { articles as localArticles, chapters as localChapters } from "../data/proposal.mock";
+import {
+  articles as localArticles,
+  chapters as localChapters,
+} from "../data/proposal.mock";
+
 import {
   fetchArticulos,
   fetchArticuloById,
@@ -6,16 +10,18 @@ import {
   fetchCapitulos,
   fetchCapituloById,
 } from "./supabase";
-import type { Article, Chapter, ArticuloDB, CapituloDB } from "./types";
+
+import type {
+  Article,
+  Chapter,
+  ArticuloDB,
+  CapituloDB,
+} from "./types";
 
 // ============================================================
-// MAPPERS: BD → Interfaz Interna
+// MAPPERS: BD → Modelo interno
 // ============================================================
 
-/**
- * Transforma un artículo de BD a formato interno
- * BD: articulos → Interfaz interna: Article
- */
 function transformArticulo(dbArticulo: ArticuloDB): Article {
   return {
     id: dbArticulo.id,
@@ -30,10 +36,6 @@ function transformArticulo(dbArticulo: ArticuloDB): Article {
   };
 }
 
-/**
- * Transforma un capítulo de BD a formato interno
- * BD: capitulos → Interfaz interna: Chapter
- */
 function transformCapitulo(dbCapitulo: CapituloDB): Chapter {
   return {
     id: dbCapitulo.id,
@@ -42,39 +44,43 @@ function transformCapitulo(dbCapitulo: CapituloDB): Chapter {
     nombre_vigente: dbCapitulo.nombre_vigente,
     nombre_propuesto: dbCapitulo.nombre_propuesto,
     slug: dbCapitulo.slug,
-    // Propiedades derivadas para plantillas
-    number: dbCapitulo.codigo, // Ej: "I", "II"
+
+    // Compatibilidad con el frontend existente
+    number: dbCapitulo.codigo,
     title: dbCapitulo.nombre_propuesto,
-    summary: "", // Se cargaría de otra fuente si es necesario
     previousTitle: dbCapitulo.nombre_vigente,
+    summary: "",
+
+    articles: [],
   };
 }
 
 // ============================================================
-// FUNCIONES PÚBLICAS: GET
+// ARTÍCULOS
 // ============================================================
 
-/**
- * Obtiene todos los artículos
- * Intenta Supabase primero, fallback a proposal.mock
- */
+
+
 export async function getArticles(): Promise<Article[]> {
   try {
     const dbArticulos = await fetchArticulos();
     return dbArticulos.map(transformArticulo);
   } catch (error) {
-    console.warn("Failed to fetch articulos from Supabase, using local data:", error);
+    console.warn(
+      "Failed to fetch articulos from Supabase, using local data:",
+      error
+    );
+
     return localArticles;
   }
 }
 
-/**
- * Obtiene un artículo específico por ID
- * Intenta Supabase primero, fallback a proposal.mock
- */
-export async function getArticleById(id: number): Promise<Article | null> {
+export async function getArticleById(
+  id: number
+): Promise<Article | null> {
   try {
     const dbArticulo = await fetchArticuloById(id);
+
     if (dbArticulo) {
       return transformArticulo(dbArticulo);
     }
@@ -88,19 +94,16 @@ export async function getArticleById(id: number): Promise<Article | null> {
   return localArticles.find((a) => a.id === id) || null;
 }
 
-/**
- * Obtiene artículos de un capítulo específico
- * Intenta Supabase primero, fallback a proposal.mock
- */
 export async function getArticlesByChapter(
   chapterId: number
 ): Promise<Article[]> {
   try {
     const dbArticulos = await fetchArticulosByCapitulo(chapterId);
+
     return dbArticulos.map(transformArticulo);
   } catch (error) {
     console.warn(
-      `Failed to fetch articulos for capitulo ${chapterId} from Supabase, using local data:`,
+      `Failed to fetch articulos for capitulo ${chapterId}, using local data:`,
       error
     );
   }
@@ -108,30 +111,61 @@ export async function getArticlesByChapter(
   return localArticles.filter((a) => a.chapterId === chapterId);
 }
 
-/**
- * Obtiene todos los capítulos
- * Intenta Supabase primero, fallback a proposal.mock
- */
+// ============================================================
+// CAPÍTULOS
+// ============================================================
+
 export async function getChapters(): Promise<Chapter[]> {
   try {
-    const dbCapitulos = await fetchCapitulos();
-    return dbCapitulos.map(transformCapitulo);
+    const [dbCapitulos, dbArticulos] = await Promise.all([
+      fetchCapitulos(),
+      fetchArticulos(),
+    ]);
+
+    const articulos = dbArticulos.map(transformArticulo);
+
+    return dbCapitulos.map((dbCapitulo) => {
+      const chapter = transformCapitulo(dbCapitulo);
+
+      chapter.articles = articulos
+        .filter((articulo) => articulo.chapterId === chapter.id)
+        .map((articulo) => ({
+          id: articulo.id,
+          title: articulo.title,
+        }));
+
+      return chapter;
+    });
   } catch (error) {
-    console.warn("Failed to fetch capitulos from Supabase, using local data:", error);
+    console.warn(
+      "Failed to fetch capitulos from Supabase, using local data:",
+      error
+    );
+
     return localChapters;
   }
 }
 
-/**
- * Obtiene un capítulo específico por ID
- * Intenta Supabase primero, fallback a proposal.mock
- */
-export async function getChapterById(id: number): Promise<Chapter | null> {
+export async function getChapterById(
+  id: number
+): Promise<Chapter | null> {
   try {
     const dbCapitulo = await fetchCapituloById(id);
-    if (dbCapitulo) {
-      return transformCapitulo(dbCapitulo);
+
+    if (!dbCapitulo) {
+      return null;
     }
+
+    const chapter = transformCapitulo(dbCapitulo);
+
+    const articulos = await getArticlesByChapter(id);
+
+    chapter.articles = articulos.map((articulo) => ({
+      id: articulo.id,
+      title: articulo.title,
+    }));
+
+    return chapter;
   } catch (error) {
     console.warn(
       `Failed to fetch capitulo ${id} from Supabase, using local data:`,

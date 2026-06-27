@@ -28,6 +28,7 @@ export type Chapter = {
   articles?: { id: number; title: string }[];
 };
 
+
 // ============================================================
 // INTERFACES DE BASE DE DATOS (directas de Supabase)
 // ============================================================

@@ -46,7 +46,11 @@ if (!article) {
   );
 }
 
-const chapters = getChapters();
+const chapters = await getChapters();
+
+console.log(article);
+console.log(chapters);
+
 const chapter = chapters.find(
   (c) => c.id === article.chapterId
 );
@@ -72,7 +76,9 @@ const nextArticle =
 </h1>
 
 <p className="mt-3 text-lg text-gray-600">
-  Artículo {article.id}
+  {article.numero
+    ? `Artículo ${article.numero}`
+    : "Preámbulo"}
 </p>
 
 <p className="mt-2 text-sm text-gray-500">
