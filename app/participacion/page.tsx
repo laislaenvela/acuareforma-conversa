@@ -132,13 +132,21 @@ export default function ParticipacionPage() {
           <div>
             <input
               type="text"
-              placeholder="Número de usuario (aparece en la factura del servicio de agua)"
+              placeholder="Número de usuario"
               value={userNumber}
               onChange={(e) =>
                 setUserNumber(e.target.value)
               }
               className={STYLES.input}
             />
+
+            <label className={`mt-2 block ${STYLES.label}`}>
+              Número de usuario
+            </label>
+
+            <p className="mt-1 text-sm leading-6 text-[color:var(--color-text-muted)]">
+              Código de usuario (aparece en la factura del servicio de agua). Escríbelo exactamente como aparece, incluyendo los ceros iniciales.
+            </p>
           </div>
 
           <input

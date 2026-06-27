@@ -6,6 +6,10 @@ import {
   fetchCapituloById,
   fetchTemas,
   fetchArticulosTemas,
+  fetchParticipanteByCorreo,
+  createParticipante,
+  createAporte,
+  fetchAportesByArticulo,
 } from "./supabase";
 
 import type {
@@ -15,6 +19,12 @@ import type {
   ArticuloDB,
   CapituloDB,
   TemaDB,
+  ParticipanteDB,
+  AporteDB,
+  ParticipantRecord,
+  ContributionRecord,
+  NewParticipantRecord,
+  NewContributionRecord,
 } from "./types";
 
 // ============================================================
@@ -60,6 +70,33 @@ function transformTema(dbTema: TemaDB): Theme {
     title: dbTema.nombre,
     slug: dbTema.slug,
     articles: [],
+  };
+}
+
+function transformParticipante(dbParticipante: ParticipanteDB): ParticipantRecord {
+  return {
+    id: dbParticipante.id,
+    name: dbParticipante.nombre,
+    email: dbParticipante.correo,
+    userCode: dbParticipante.codigo_usuario,
+    createdAt: dbParticipante.created_at,
+    updatedAt: dbParticipante.updated_at,
+  };
+}
+
+function transformAporte(dbAporte: AporteDB): ContributionRecord {
+  return {
+    id: dbAporte.id,
+    participantId: dbAporte.participante_id,
+    articleId: dbAporte.articulo_id,
+    type: dbAporte.tipo,
+    position: dbAporte.posicion,
+    content: dbAporte.contenido,
+    justification: dbAporte.justificacion,
+    proposedText: dbAporte.propuesta_redaccion,
+    anonymous: dbAporte.anonimo,
+    createdAt: dbAporte.created_at,
+    updatedAt: dbAporte.updated_at,
   };
 }
 
@@ -160,4 +197,86 @@ export async function getThemes(): Promise<Theme[]> {
 
     return theme;
   });
+}
+
+// ============================================================
+// PARTICIPANTES
+// ============================================================
+
+export async function getParticipantByEmail(
+  email: string
+): Promise<ParticipantRecord | null> {
+  const dbParticipante = await fetchParticipanteByCorreo(email);
+
+  if (!dbParticipante) {
+    return null;
+  }
+
+  return transformParticipante(dbParticipante);
+}
+
+export async function saveParticipantRecord(
+  participant: NewParticipantRecord
+): Promise<ParticipantRecord> {
+  const dbParticipante = await createParticipante({
+    nombre: participant.name,
+    correo: participant.email,
+    codigo_usuario: participant.userCode,
+  });
+
+  return transformParticipante(dbParticipante);
+}
+
+// ============================================================
+// APORTES
+// ============================================================
+
+export async function saveContributionRecord(
+  contribution: NewContributionRecord
+): Promise<ContributionRecord> {
+  const dbAporte = await createAporte({
+    participante_id: contribution.participantId,
+    articulo_id: contribution.articleId,
+    tipo: contribution.type,
+    posicion: contribution.position,
+    contenido: contribution.content,
+    justificacion: contribution.justification,
+    propuesta_redaccion: contribution.proposedText,
+    anonimo: contribution.anonymous,
+  });
+
+  return transformAporte(dbAporte);
+}
+
+export async function registrarAporte({
+  participant,
+  contribution,
+}: {
+  participant: NewParticipantRecord;
+  contribution: Omit<NewContributionRecord, "participantId">;
+}): Promise<{
+  participant: ParticipantRecord;
+  contribution: ContributionRecord;
+}> {
+  const existingParticipant = await getParticipantByEmail(participant.email);
+
+  const resolvedParticipant = existingParticipant ??
+    await saveParticipantRecord(participant);
+
+  const savedContribution = await saveContributionRecord({
+    ...contribution,
+    participantId: resolvedParticipant.id,
+  });
+
+  return {
+    participant: resolvedParticipant,
+    contribution: savedContribution,
+  };
+}
+
+export async function getContributionsByArticle(
+  articleId: number
+): Promise<ContributionRecord[]> {
+  const dbAportes = await fetchAportesByArticulo(articleId);
+  return dbAportes.map(transformAporte);
 }

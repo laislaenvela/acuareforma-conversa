@@ -4,6 +4,8 @@ import type {
   CapituloDB,
   TemaDB,
   ArticuloTemaDB,
+  ParticipanteDB,
+  AporteDB,
 } from "./types";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -147,6 +149,82 @@ export async function fetchArticulosTemas(): Promise<ArticuloTemaDB[]> {
 
   if (error) {
     console.error("Error fetching articulos_temas:", error);
+    throw error;
+  }
+
+  return data || [];
+}
+
+// ============================================================
+// PARTICIPANTES
+// ============================================================
+
+export async function fetchParticipanteByCorreo(
+  correo: string
+): Promise<ParticipanteDB | null> {
+  const { data, error } = await supabase
+    .from("participantes")
+    .select("*")
+    .eq("correo", correo)
+    .maybeSingle();
+
+  if (error) {
+    console.error(`Error fetching participante by correo ${correo}:`, error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function createParticipante(
+  participante: Omit<ParticipanteDB, "id" | "created_at" | "updated_at">
+): Promise<ParticipanteDB> {
+  const { data, error } = await supabase
+    .from("participantes")
+    .insert(participante)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating participante:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+// ============================================================
+// APORTES
+// ============================================================
+
+export async function createAporte(
+  aporte: Omit<AporteDB, "id" | "created_at" | "updated_at">
+): Promise<AporteDB> {
+  const { data, error } = await supabase
+    .from("aportes")
+    .insert(aporte)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating aporte:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function fetchAportesByArticulo(
+  articuloId: number
+): Promise<AporteDB[]> {
+  const { data, error } = await supabase
+    .from("aportes")
+    .select("*")
+    .eq("articulo_id", articuloId)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error(`Error fetching aportes for articulo ${articuloId}:`, error);
     throw error;
   }
 

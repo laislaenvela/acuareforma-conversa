@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
-import { getParticipant, addContribution } from "@/app/lib/storage";
+import { registrarAporte } from "@/app/lib/data";
+import { getParticipant } from "@/app/lib/storage";
 import { STYLES } from "@/app/lib/styles";
 
 type ParticipationGateProps = {
@@ -36,27 +37,76 @@ const [alternativeText, setAlternativeText] =
 const [submitted, setSubmitted] =
   useState(false);
 
+const [submitError, setSubmitError] =
+  useState("");
+
+const [isSubmitting, setIsSubmitting] =
+  useState(false);
+
   useEffect(() => {
     setParticipant(getParticipant());
     setLoaded(true);
   }, []);
 
-  function handleSubmit() {
-    const newContribution = {
-      articleId,
-      articleTitle,
-      participantName: participant?.fullName,
-      participantUser: participant?.userNumber,
-      position: position as typeof POSITION_OPTIONS[number],
-      contributionType: contributionType as typeof CONTRIBUTION_TYPE_OPTIONS[number],
-      comment,
-      justification,
-      alternativeText,
-      createdAt: new Date().toISOString(),
-    };
+  async function handleSubmit() {
+    if (!participant?.email || !participant.fullName || !participant.userNumber) {
+      setSubmitError("Debes completar tu identificación antes de enviar un aporte.");
+      return;
+    }
 
-    addContribution(newContribution);
-    setSubmitted(true);
+    if (!position) {
+      setSubmitError("Selecciona cómo te posicionas frente a este artículo.");
+      return;
+    }
+
+    if (!contributionType) {
+      setSubmitError("Selecciona el tipo de aporte que deseas compartir.");
+      return;
+    }
+
+    if (!comment.trim()) {
+      setSubmitError("Escribe tu aporte antes de enviarlo.");
+      return;
+    }
+
+    setSubmitError("");
+    setIsSubmitting(true);
+
+    try {
+      const normalizedComment = comment.trim();
+      const normalizedJustification = justification.trim();
+
+      await registrarAporte({
+        participant: {
+          name: participant.fullName,
+          email: participant.email,
+          userCode: participant.userNumber,
+        },
+        contribution: {
+          articleId,
+          type: contributionType as typeof CONTRIBUTION_TYPE_OPTIONS[number],
+          position: position as typeof POSITION_OPTIONS[number],
+          content: normalizedComment,
+          justification: normalizedJustification,
+          proposedText: alternativeText,
+          anonymous: false,
+        },
+      });
+
+      setPosition("");
+      setContributionType("");
+      setComment("");
+      setJustification("");
+      setAlternativeText("");
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Error registering contribution:", error);
+      setSubmitError(
+        "No pudimos guardar tu aporte en este momento. Inténtalo de nuevo en unos minutos."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (!loaded) {
@@ -100,6 +150,7 @@ if (submitted) {
         <button
           onClick={() => {
             setSubmitted(false);
+            setSubmitError("");
 
             setPosition("");
             setContributionType("");
@@ -210,11 +261,18 @@ onChange={(e) => setAlternativeText(e.target.value)}
           className={`mt-4 min-h-32 ${STYLES.textarea}`}
         />
 
+        {submitError ? (
+          <p className="mt-4 text-sm text-[color:var(--color-primary-dark)]">
+            {submitError}
+          </p>
+        ) : null}
+
         <button
   onClick={handleSubmit}
+  disabled={isSubmitting}
   className={`mt-6 ${STYLES.buttonPrimary}`}
 >
-          Compartir aporte
+          {isSubmitting ? "Guardando aporte..." : "Compartir aporte"}
         </button>
 
       </section>

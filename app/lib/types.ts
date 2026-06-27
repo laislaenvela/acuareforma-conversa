@@ -35,6 +35,39 @@ export type Theme = {
   articles: number[];
 };
 
+export type ParticipantRecord = {
+  id: number;
+  name: string;
+  email: string;
+  userCode: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type ContributionRecord = {
+  id: number;
+  participantId: number;
+  articleId: number;
+  type: ContributionType;
+  position: ContributionPosition;
+  content: string;
+  justification: string;
+  proposedText: string;
+  anonymous: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type NewParticipantRecord = Omit<
+  ParticipantRecord,
+  "id" | "createdAt" | "updatedAt"
+>;
+
+export type NewContributionRecord = Omit<
+  ContributionRecord,
+  "id" | "createdAt" | "updatedAt"
+>;
+
 
 // ============================================================
 // INTERFACES DE BASE DE DATOS (directas de Supabase)
@@ -76,6 +109,29 @@ export interface TemaDB {
 export interface ArticuloTemaDB {
   articulo_id: number;
   tema_id: number;
+}
+
+export interface ParticipanteDB {
+  id: number;
+  nombre: string;
+  correo: string;
+  codigo_usuario: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface AporteDB {
+  id: number;
+  participante_id: number;
+  articulo_id: number;
+  tipo: ContributionType;
+  posicion: ContributionPosition;
+  contenido: string;
+  justificacion: string;
+  propuesta_redaccion: string;
+  anonimo: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export type Participant = {
