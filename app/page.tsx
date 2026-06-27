@@ -94,6 +94,12 @@ export default function Home() {
             Aquí puedes revisar los cambios, entender cómo se está dando la conversación
             y participar cuando tengas una opinión informada.
           </p>
+
+          <div className="mt-6">
+            <Link href="/explorar" className={STYLES.buttonPrimary}>
+              Explorar la propuesta
+            </Link>
+          </div>
         </div>
 
          

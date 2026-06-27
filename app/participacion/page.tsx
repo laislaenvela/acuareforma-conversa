@@ -91,9 +91,10 @@ export default function ParticipacionPage() {
     [uniqueArticles]
   );
 
-  const totalArticles = articles.length;
-  const pendingArticles =
-    totalArticles - articlesWithOpinion;
+  const pendingArticleList = useMemo(() =>
+    articles.filter((article) => !uniqueArticles.has(article.id)),
+    [articles, uniqueArticles]
+  );
 
   const articleNumeroById = useMemo(
     () => new Map(articles.map((article) => [article.id, article.numero])),
@@ -115,6 +116,7 @@ export default function ParticipacionPage() {
       </p>
 
       {!participant ? (
+        <>
         <div className="mt-8 flex flex-col gap-4 rounded-2xl bg-[color:var(--color-background-alt)] p-6 md:p-8">
 
           <input
@@ -127,15 +129,17 @@ export default function ParticipacionPage() {
             className={STYLES.input}
           />
 
-          <input
-            type="text"
-            placeholder="Número de usuario"
-            value={userNumber}
-            onChange={(e) =>
-              setUserNumber(e.target.value)
-            }
-            className={STYLES.input}
-          />
+          <div>
+            <input
+              type="text"
+              placeholder="Número de usuario (aparece en la factura del servicio de agua)"
+              value={userNumber}
+              onChange={(e) =>
+                setUserNumber(e.target.value)
+              }
+              className={STYLES.input}
+            />
+          </div>
 
           <input
             type="email"
@@ -155,6 +159,12 @@ export default function ParticipacionPage() {
           </button>
 
         </div>
+        <p className="mt-4 text-sm leading-6 text-[color:var(--color-text-muted)]">
+          Tus datos serán utilizados únicamente para gestionar tu participación en el proceso
+          de revisión de la reforma estatutaria. Puedes consultar aquí nuestra Política de
+          Tratamiento de Datos.
+        </p>
+        </>
       ) : (
         <div className={`mt-8 ${STYLES.card}`}>
 
@@ -238,17 +248,55 @@ export default function ParticipacionPage() {
       </div>
     </div>
 
-    <div className={STYLES.communityCard}>
-      <div className={STYLES.cardLabel}>
-        Pendientes de opinión
-      </div>
-
-      <div className="text-3xl font-bold text-[color:var(--color-primary-dark)]">
-        {pendingArticles}
-      </div>
-    </div>
-
   </div>
+
+  <details className={`mt-6 ${STYLES.card}`}>
+    <summary className="cursor-pointer list-none">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <div className="text-xs font-medium uppercase tracking-wide text-[color:var(--color-text-muted)]">
+            Pendientes por revisar
+          </div>
+          <div className="mt-1 text-3xl font-bold text-[color:var(--color-primary-dark)]">
+            {pendingArticleList.length}
+          </div>
+        </div>
+
+        <span className="text-sm font-medium text-[color:var(--color-text-muted)]">
+          Ver lista
+        </span>
+      </div>
+    </summary>
+
+    <p className="mt-3 text-sm text-[color:var(--color-text-muted)]">
+      Estos son los artículos que aún no tienen una participación registrada de tu parte.
+      Selecciona uno para revisarlo y aportar.
+    </p>
+
+    {pendingArticleList.length === 0 ? (
+      <p className="mt-4 text-sm text-[color:var(--color-text-muted)]">
+        Ya revisaste todos los artículos disponibles.
+      </p>
+    ) : (
+      <div className="mt-4 flex flex-col gap-3">
+        {pendingArticleList.map((article) => (
+          <Link
+            key={article.id}
+            href={`/articulo/${article.id}`}
+            className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-primary)]`}
+          >
+            <div className="text-sm text-[color:var(--color-text-muted)]">
+              Artículo {article.numero}
+            </div>
+
+            <div className="mt-1 font-semibold text-[color:var(--color-primary-dark)]">
+              {article.title}
+            </div>
+          </Link>
+        ))}
+      </div>
+    )}
+  </details>
 
 </div>
           <div className={`${STYLES.sectionAlt} ${STYLES.divider}`}>
