@@ -234,7 +234,7 @@ export async function saveParticipantRecord(
 export async function saveContributionRecord(
   contribution: NewContributionRecord
 ): Promise<ContributionRecord> {
-  const dbAporte = await createAporte({
+  const aportePayload = {
     participante_id: contribution.participantId,
     articulo_id: contribution.articleId,
     tipo: contribution.type,
@@ -243,7 +243,11 @@ export async function saveContributionRecord(
     justificacion: contribution.justification,
     propuesta_redaccion: contribution.proposedText,
     anonimo: contribution.anonymous,
-  });
+  };
+
+  console.log("[DEBUG] Payload antes de createAporte", aportePayload);
+
+  const dbAporte = await createAporte(aportePayload);
 
   return transformAporte(dbAporte);
 }
@@ -258,6 +262,11 @@ export async function registrarAporte({
   participant: ParticipantRecord;
   contribution: ContributionRecord;
 }> {
+  console.log("[DEBUG] Inicio registrarAporte", {
+    participant,
+    contribution,
+  });
+
   const existingParticipant = await getParticipantByEmail(participant.email);
 
   const resolvedParticipant = existingParticipant ??

@@ -15,6 +15,13 @@ const POSITION_VALUE_MAP = {
   "Necesito más información": "necesito_mas_informacion",
 } as const;
 
+const CONTRIBUTION_TYPE_VALUE_MAP = {
+  Pregunta: "pregunta",
+  Observación: "observacion",
+  "Riesgo identificado": "riesgo_identificado",
+  "Comentario de apoyo": "comentario_de_apoyo",
+} as const;
+
 type ParticipationGateProps = {
   articleId: number;
   articleTitle: string;
@@ -85,6 +92,9 @@ const [isSubmitting, setIsSubmitting] =
       const normalizedPosition = POSITION_VALUE_MAP[
         position as keyof typeof POSITION_VALUE_MAP
       ];
+      const normalizedContributionType = CONTRIBUTION_TYPE_VALUE_MAP[
+        contributionType as keyof typeof CONTRIBUTION_TYPE_VALUE_MAP
+      ];
 
       if (!normalizedPosition) {
         setSubmitError("Selecciona una posición válida antes de enviar tu aporte.");
@@ -92,7 +102,13 @@ const [isSubmitting, setIsSubmitting] =
         return;
       }
 
-      await registrarAporte({
+      if (!normalizedContributionType) {
+        setSubmitError("Selecciona un tipo de aporte válido antes de enviar.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const aportePayload = {
         participant: {
           name: participant.fullName,
           email: participant.email,
@@ -100,14 +116,18 @@ const [isSubmitting, setIsSubmitting] =
         },
         contribution: {
           articleId,
-          type: contributionType as typeof CONTRIBUTION_TYPE_OPTIONS[number],
+          type: normalizedContributionType as never,
           position: normalizedPosition as never,
           content: normalizedComment,
           justification: normalizedJustification,
           proposedText: alternativeText,
           anonymous: false,
         },
-      });
+      };
+
+      console.log("[DEBUG] Payload antes de registrarAporte", aportePayload);
+
+      await registrarAporte(aportePayload);
 
       setPosition("");
       setContributionType("");

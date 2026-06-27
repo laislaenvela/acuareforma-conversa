@@ -219,11 +219,24 @@ export async function createAporte(
     .from("aportes")
     .insert(aporte)
     .select()
-    .single();
+    .maybeSingle();
+
+  console.log("[DEBUG] Respuesta Supabase createAporte", {
+    data,
+    error,
+  });
 
   if (error) {
     logSupabaseError("Error creating aporte:", error);
     throw error;
+  }
+
+  if (!data) {
+    // El INSERT puede ser exitoso aunque la respuesta no incluya fila retornada.
+    return {
+      id: 0,
+      ...aporte,
+    };
   }
 
   return data;
