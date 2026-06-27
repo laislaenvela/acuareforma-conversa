@@ -8,6 +8,13 @@ import { registrarAporte } from "@/app/lib/data";
 import { getParticipant } from "@/app/lib/storage";
 import { STYLES } from "@/app/lib/styles";
 
+const POSITION_VALUE_MAP = {
+  "De acuerdo": "de_acuerdo",
+  "Parcialmente de acuerdo": "parcialmente_de_acuerdo",
+  "En desacuerdo": "en_desacuerdo",
+  "Necesito más información": "necesito_mas_informacion",
+} as const;
+
 type ParticipationGateProps = {
   articleId: number;
   articleTitle: string;
@@ -75,6 +82,15 @@ const [isSubmitting, setIsSubmitting] =
     try {
       const normalizedComment = comment.trim();
       const normalizedJustification = justification.trim();
+      const normalizedPosition = POSITION_VALUE_MAP[
+        position as keyof typeof POSITION_VALUE_MAP
+      ];
+
+      if (!normalizedPosition) {
+        setSubmitError("Selecciona una posición válida antes de enviar tu aporte.");
+        setIsSubmitting(false);
+        return;
+      }
 
       await registrarAporte({
         participant: {
@@ -85,7 +101,7 @@ const [isSubmitting, setIsSubmitting] =
         contribution: {
           articleId,
           type: contributionType as typeof CONTRIBUTION_TYPE_OPTIONS[number],
-          position: position as typeof POSITION_OPTIONS[number],
+          position: normalizedPosition as never,
           content: normalizedComment,
           justification: normalizedJustification,
           proposedText: alternativeText,
