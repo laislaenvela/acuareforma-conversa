@@ -18,8 +18,8 @@ const POSITION_VALUE_MAP = {
 const CONTRIBUTION_TYPE_VALUE_MAP = {
   Pregunta: "pregunta",
   Observación: "observacion",
-  "Riesgo identificado": "riesgo_identificado",
-  "Comentario de apoyo": "comentario_de_apoyo",
+  "Riesgo identificado": "riesgo",
+  "Comentario de apoyo": "apoyo",
 } as const;
 
 type ParticipationGateProps = {

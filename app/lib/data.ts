@@ -107,10 +107,12 @@ function normalizeAporteTipo(value: string): string {
     observacion: "observacion",
     Observación: "observacion",
     Observacion: "observacion",
-    riesgo_identificado: "riesgo_identificado",
-    "Riesgo identificado": "riesgo_identificado",
-    comentario_de_apoyo: "comentario_de_apoyo",
-    "Comentario de apoyo": "comentario_de_apoyo",
+    riesgo_identificado: "riesgo",
+    "Riesgo identificado": "riesgo",
+    riesgo: "riesgo",
+    comentario_de_apoyo: "apoyo",
+    "Comentario de apoyo": "apoyo",
+    apoyo: "apoyo",
   };
 
   return map[value] ?? value;
