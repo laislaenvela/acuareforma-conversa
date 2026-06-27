@@ -4,23 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
-import { registrarAporte } from "@/app/lib/data";
-import { getParticipant } from "@/app/lib/storage";
+import { getParticipant, addContribution } from "@/app/lib/storage";
 import { STYLES } from "@/app/lib/styles";
-
-const POSITION_VALUE_MAP = {
-  "De acuerdo": "de_acuerdo",
-  "Parcialmente de acuerdo": "parcialmente_de_acuerdo",
-  "En desacuerdo": "en_desacuerdo",
-  "Necesito más información": "necesito_mas_informacion",
-} as const;
-
-const CONTRIBUTION_TYPE_VALUE_MAP = {
-  Pregunta: "pregunta",
-  Observación: "observacion",
-  "Riesgo identificado": "riesgo",
-  "Comentario de apoyo": "apoyo",
-} as const;
 
 type ParticipationGateProps = {
   articleId: number;
@@ -87,47 +72,20 @@ const [isSubmitting, setIsSubmitting] =
     setIsSubmitting(true);
 
     try {
-      const normalizedComment = comment.trim();
-      const normalizedJustification = justification.trim();
-      const normalizedPosition = POSITION_VALUE_MAP[
-        position as keyof typeof POSITION_VALUE_MAP
-      ];
-      const normalizedContributionType = CONTRIBUTION_TYPE_VALUE_MAP[
-        contributionType as keyof typeof CONTRIBUTION_TYPE_VALUE_MAP
-      ];
-
-      if (!normalizedPosition) {
-        setSubmitError("Selecciona una posición válida antes de enviar tu aporte.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!normalizedContributionType) {
-        setSubmitError("Selecciona un tipo de aporte válido antes de enviar.");
-        setIsSubmitting(false);
-        return;
-      }
-
-      const aportePayload = {
-        participant: {
-          name: participant.fullName,
-          email: participant.email,
-          userCode: participant.userNumber,
-        },
-        contribution: {
-          articleId,
-          type: normalizedContributionType as never,
-          position: normalizedPosition as never,
-          content: normalizedComment,
-          justification: normalizedJustification,
-          proposedText: alternativeText,
-          anonymous: false,
-        },
+      const newContribution = {
+        articleId,
+        articleTitle,
+        participantName: participant.fullName,
+        participantUser: participant.userNumber,
+        position: position as typeof POSITION_OPTIONS[number],
+        contributionType: contributionType as typeof CONTRIBUTION_TYPE_OPTIONS[number],
+        comment: comment.trim(),
+        justification: justification.trim(),
+        alternativeText,
+        createdAt: new Date().toISOString(),
       };
 
-      console.log("[DEBUG] Payload antes de registrarAporte", aportePayload);
-
-      await registrarAporte(aportePayload);
+      addContribution(newContribution);
 
       setPosition("");
       setContributionType("");
