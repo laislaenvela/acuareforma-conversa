@@ -17,6 +17,37 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+function normalizeTipo(value: string): string {
+  const map: Record<string, string> = {
+    pregunta: "pregunta",
+    Pregunta: "pregunta",
+    observacion: "observacion",
+    Observación: "observacion",
+    Observacion: "observacion",
+    riesgo_identificado: "riesgo_identificado",
+    "Riesgo identificado": "riesgo_identificado",
+    comentario_de_apoyo: "comentario_de_apoyo",
+    "Comentario de apoyo": "comentario_de_apoyo",
+  };
+
+  return map[value] ?? value;
+}
+
+function normalizePosicion(value: string): string {
+  const map: Record<string, string> = {
+    de_acuerdo: "de_acuerdo",
+    "De acuerdo": "de_acuerdo",
+    parcialmente_de_acuerdo: "parcialmente_de_acuerdo",
+    "Parcialmente de acuerdo": "parcialmente_de_acuerdo",
+    en_desacuerdo: "en_desacuerdo",
+    "En desacuerdo": "en_desacuerdo",
+    necesito_mas_informacion: "necesito_mas_informacion",
+    "Necesito más información": "necesito_mas_informacion",
+  };
+
+  return map[value] ?? value;
+}
+
 function logSupabaseError(context: string, error: {
   message?: string;
   code?: string;
@@ -215,15 +246,31 @@ export async function createParticipante(
 export async function createAporte(
   aporte: Omit<AporteDB, "id" | "created_at" | "updated_at">
 ): Promise<AporteDB> {
+  const normalizedAporte = {
+    ...aporte,
+    participante_id: Number(aporte.participante_id),
+    articulo_id: Number(aporte.articulo_id),
+    tipo: normalizeTipo(String(aporte.tipo)) as never,
+    posicion: normalizePosicion(String(aporte.posicion)) as never,
+    contenido: aporte.contenido ?? "",
+    justificacion: aporte.justificacion ?? "",
+    propuesta_redaccion: aporte.propuesta_redaccion ?? "",
+  };
+
   const { data, error } = await supabase
     .from("aportes")
-    .insert(aporte)
+    .insert(normalizedAporte)
     .select()
     .maybeSingle();
 
+  console.log("[DEBUG] Payload final createAporte", normalizedAporte);
   console.log("[DEBUG] Respuesta Supabase createAporte", {
     data,
     error,
+    errorMessage: error?.message,
+    errorCode: error?.code,
+    errorDetails: error?.details,
+    errorHint: error?.hint,
   });
 
   if (error) {
@@ -235,7 +282,7 @@ export async function createAporte(
     // El INSERT puede ser exitoso aunque la respuesta no incluya fila retornada.
     return {
       id: 0,
-      ...aporte,
+      ...normalizedAporte,
     };
   }
 
