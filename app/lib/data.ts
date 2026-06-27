@@ -100,6 +100,37 @@ function transformAporte(dbAporte: AporteDB): ContributionRecord {
   };
 }
 
+function normalizeAporteTipo(value: string): string {
+  const map: Record<string, string> = {
+    pregunta: "pregunta",
+    Pregunta: "pregunta",
+    observacion: "observacion",
+    Observación: "observacion",
+    Observacion: "observacion",
+    riesgo_identificado: "riesgo_identificado",
+    "Riesgo identificado": "riesgo_identificado",
+    comentario_de_apoyo: "comentario_de_apoyo",
+    "Comentario de apoyo": "comentario_de_apoyo",
+  };
+
+  return map[value] ?? value;
+}
+
+function normalizeAportePosicion(value: string): string {
+  const map: Record<string, string> = {
+    de_acuerdo: "de_acuerdo",
+    "De acuerdo": "de_acuerdo",
+    parcialmente_de_acuerdo: "parcialmente_de_acuerdo",
+    "Parcialmente de acuerdo": "parcialmente_de_acuerdo",
+    en_desacuerdo: "en_desacuerdo",
+    "En desacuerdo": "en_desacuerdo",
+    necesito_mas_informacion: "necesito_mas_informacion",
+    "Necesito más información": "necesito_mas_informacion",
+  };
+
+  return map[value] ?? value;
+}
+
 // ============================================================
 // ARTÍCULOS
 // ============================================================
@@ -234,11 +265,14 @@ export async function saveParticipantRecord(
 export async function saveContributionRecord(
   contribution: NewContributionRecord
 ): Promise<ContributionRecord> {
+  const normalizedTipo = normalizeAporteTipo(String(contribution.type));
+  const normalizedPosicion = normalizeAportePosicion(String(contribution.position));
+
   const aportePayload = {
     participante_id: contribution.participantId,
     articulo_id: contribution.articleId,
-    tipo: contribution.type,
-    posicion: contribution.position,
+    tipo: normalizedTipo as never,
+    posicion: normalizedPosicion as never,
     contenido: contribution.content,
     justificacion: contribution.justification,
     propuesta_redaccion: contribution.proposedText,
