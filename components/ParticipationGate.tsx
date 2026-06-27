@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
 import { getParticipant, addContribution } from "@/app/lib/storage";
+import { STYLES } from "@/app/lib/styles";
 
 type ParticipationGateProps = {
   articleId: number;
@@ -64,18 +65,18 @@ const [submitted, setSubmitted] =
 
   if (!participant) {
     return (
-      <section className="mt-12 rounded-xl border p-6">
-        <h2 className="text-2xl font-semibold">
+      <section className={`mt-12 ${STYLES.card}`}>
+        <h2 className={STYLES.h2}>
           Participación
         </h2>
 
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-[color:var(--color-text-muted)]">
           Debes identificarte antes de participar.
         </p>
 
         <Link
           href="/participacion"
-          className="mt-4 inline-block rounded-lg border px-4 py-2"
+          className={`mt-4 ${STYLES.buttonSecondary}`}
         >
           Ir a Mi participación
         </Link>
@@ -84,13 +85,13 @@ const [submitted, setSubmitted] =
   }
 if (submitted) {
   return (
-    <section className="mt-12 rounded-xl border p-6">
+    <section className={`mt-12 ${STYLES.card}`}>
 
-      <h2 className="text-2xl font-semibold">
+      <h2 className={STYLES.h2}>
         Gracias por participar
       </h2>
 
-      <p className="mt-4 text-gray-600">
+      <p className="mt-4 text-[color:var(--color-text-muted)]">
         Tu aporte fue guardado correctamente.
       </p>
 
@@ -107,14 +108,14 @@ if (submitted) {
             setJustification("");
             setAlternativeText("");
           }}
-          className="rounded-lg bg-black px-4 py-2 text-white"
+          className={STYLES.buttonPrimary}
         >
           Hacer otro aporte sobre este artículo
         </button>
 
         <Link
   href="/participacion"
-  className="rounded-lg border px-4 py-2 text-center"
+  className={`${STYLES.buttonSecondary} text-center`}
 >
   Ir a Mi participación
 </Link>
@@ -126,36 +127,37 @@ if (submitted) {
 }
   return (
     <>
-      <section className="mt-12 rounded-xl border p-6">
+      <section className={`mt-12 ${STYLES.card}`}>
 
-        <h2 className="text-2xl font-semibold">
+        <h2 className={STYLES.h2}>
           Participando como:
         </h2>
 
-        <p className="mt-4 font-medium">
+        <p className="mt-4 font-medium text-[color:var(--color-text)]">
           {participant.fullName}
         </p>
 
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-[color:var(--color-text-muted)]">
           Usuario {participant.userNumber}
         </p>
 
       </section>
 
-      <section className="mt-10 rounded-xl border p-6">
+      <section className={`mt-10 ${STYLES.card}`}>
 
-        <h2 className="text-2xl font-semibold">
+        <h2 className={STYLES.h2}>
           ¿Cómo te posicionas?
         </h2>
 
         <div className="mt-6 flex flex-col gap-3">
           {POSITION_OPTIONS.map((pos) => (
-            <label key={pos}>
+            <label key={pos} className={`${STYLES.label} flex items-start gap-2`}>
               <input
                 type="radio"
                 name="position"
                 value={pos}
                 onChange={(e) => setPosition(e.target.value)}
+                className="mt-1 accent-[color:var(--color-primary)]"
               /> {pos}
             </label>
           ))}
@@ -163,24 +165,25 @@ if (submitted) {
 
       </section>
 
-      <section className="mt-10 rounded-xl border p-6">
+      <section className={`mt-10 ${STYLES.card}`}>
 
-        <h2 className="text-2xl font-semibold">
+        <h2 className={STYLES.h2}>
           Comparte tu aporte
         </h2>
 
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-[color:var(--color-text-muted)]">
           Comparte tu perspectiva sobre este artículo para enriquecer la conversación comunitaria.
         </p>
 
         <div className="mt-6 flex flex-col gap-3">
           {CONTRIBUTION_TYPE_OPTIONS.map((type) => (
-            <label key={type}>
+            <label key={type} className={`${STYLES.label} flex items-start gap-2`}>
               <input
                 type="radio"
                 name="contribution"
                 value={type}
                 onChange={(e) => setContributionType(e.target.value)}
+                className="mt-1 accent-[color:var(--color-primary)]"
               /> {type}
             </label>
           ))}
@@ -190,26 +193,26 @@ if (submitted) {
           placeholder="Comparte tu pregunta, observación o comentario sobre este artículo."
           value={comment}
 onChange={(e) => setComment(e.target.value)}
-          className="mt-6 min-h-32 w-full rounded-lg border p-3"
+          className={`mt-6 min-h-32 ${STYLES.textarea}`}
         />
 
         <textarea
           placeholder="Puedes compartir experiencias, argumentos o ejemplos que ayuden a comprender mejor tu punto de vista. (Opcional)"
           value={justification}
 onChange={(e) => setJustification(e.target.value)}
-          className="mt-4 min-h-32 w-full rounded-lg border p-3"
+          className={`mt-4 min-h-32 ${STYLES.textarea}`}
         />
 
         <textarea
           placeholder="¿Tienes una propuesta de redacción alternativa? (Opcional)"
           value={alternativeText}
 onChange={(e) => setAlternativeText(e.target.value)}
-          className="mt-4 min-h-32 w-full rounded-lg border p-3"
+          className={`mt-4 min-h-32 ${STYLES.textarea}`}
         />
 
         <button
   onClick={handleSubmit}
-  className="mt-6 rounded-lg bg-black px-5 py-3 text-white"
+  className={`mt-6 ${STYLES.buttonPrimary}`}
 >
           Compartir aporte
         </button>

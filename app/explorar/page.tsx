@@ -4,6 +4,13 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { getArticles, getChapters, getThemes } from "../lib/data";
 import type { Article, Chapter, Theme } from "../lib/types";
+import { STYLES } from "../lib/styles";
+import SegmentedControl from "@/components/SegmentedControl";
+
+const VIEW_OPTIONS = [
+  { value: "chapters", label: "Capítulos" },
+  { value: "themes", label: "Temas" },
+] as const;
 
 export default function ExplorarPage() {
   const [view, setView] = useState("chapters");
@@ -14,6 +21,11 @@ export default function ExplorarPage() {
 
   const articleTitleById = useMemo(
     () => new Map(articles.map((article) => [article.id, article.title])),
+    [articles]
+  );
+
+  const articleNumeroById = useMemo(
+    () => new Map(articles.map((article) => [article.id, article.numero])),
     [articles]
   );
 
@@ -39,76 +51,67 @@ export default function ExplorarPage() {
     loadData();
   }, []);
   return (
-    <main className="mx-auto max-w-6xl p-8">
-      <h1 className="text-4xl font-bold">
+    <main className={STYLES.page}>
+      <section className={`${STYLES.container} py-12 md:py-16`}>
+      <h1 className={STYLES.h1}>
         Explorar la propuesta
       </h1>
 
-      <p className="mt-4 text-gray-600">
-        Elige la forma en que deseas recorrer la propuesta de reforma estatutaria.
+      <p className={`${STYLES.subtitle} mt-4 max-w-3xl`}>
+        Cada artículo explica una parte de la reforma estatutaria.
+        Puedes recorrer la propuesta por capítulos o por temas para entender los cambios
+        desde el enfoque que te resulte más útil.
       </p>
 
-      <div className="mt-8 flex gap-4">
-        <button
-          onClick={() => setView("chapters")}
-          className={`rounded-lg px-4 py-2 ${
-            view === "chapters"
-              ? "bg-blue-600 text-white"
-              : "border"
-          }`}
-        >
-          Capítulos
-        </button>
-
-        <button
-          onClick={() => setView("themes")}
-          className={`rounded-lg px-4 py-2 ${
-            view === "themes"
-              ? "bg-blue-600 text-white"
-              : "border"
-          }`}
-        >
-          Temas
-        </button>
+      <div className="mt-8">
+        <SegmentedControl
+          value={view}
+          options={VIEW_OPTIONS}
+          onChange={setView}
+          segmentedClassName={STYLES.segmented}
+          segmentClassName={STYLES.segment}
+          activeClassName={STYLES.segmentActive}
+          inactiveClassName={STYLES.segmentInactive}
+        />
       </div>
 
-      <div className="mt-10 grid gap-4">
+      <div className={`${STYLES.sectionAlt} grid gap-4`}>
         {loading && view === "chapters" && (
-          <p className="text-gray-500">Cargando capítulos...</p>
+          <p className="text-[color:var(--color-text-muted)]">Cargando capítulos...</p>
         )}
 
         {loading && view === "themes" && (
-          <p className="text-gray-500">Cargando temas...</p>
+          <p className="text-[color:var(--color-text-muted)]">Cargando temas...</p>
         )}
 
         {view === "chapters" &&
   chapters.map((chapter) => (
     <details
       key={chapter.id}
-      className="rounded-xl border p-6"
+      className={STYLES.card}
     >
       <summary className="cursor-pointer">
-  <div className="text-sm text-gray-500">
+  <div className={STYLES.cardLabel}>
     CAPÍTULO {chapter.number}
   </div>
 
-  <div className="text-xl font-semibold">
+  <div className={STYLES.cardTitle}>
     {chapter.title}
   </div>
 </summary>
 <div className="mt-4">
   {chapter.previousTitle && (
-    <p className="text-sm text-gray-500">
+    <p className="text-sm text-[color:var(--color-text-muted)]">
       <strong>Antes:</strong> {chapter.previousTitle}
     </p>
   )}
-    <p className="mt-3 text-gray-700">
+    <p className={`${STYLES.body} mt-3`}>
     {chapter.summary}
   </p>
 </div>
 
 <div className="mt-6">
-  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">
     Artículos incluidos
   </h3>
 
@@ -117,10 +120,12 @@ export default function ExplorarPage() {
       <Link
         key={article.id}
         href={`/articulo/${article.id}`}
-        className="rounded-lg border p-3 hover:bg-gray-50"
+        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
       >
-        <div className="text-sm text-gray-500">
-          Artículo {article.id}
+        <div className="text-sm text-[color:var(--color-text-muted)]">
+          {articleNumeroById.get(article.id)
+            ? `Artículo ${articleNumeroById.get(article.id)}`
+            : "Preámbulo"}
         </div>
 
         <div className="font-medium">
@@ -137,21 +142,21 @@ export default function ExplorarPage() {
           themes.map((theme) => (
             <details
               key={theme.id}
-              className="rounded-xl border p-6"
+              className={STYLES.card}
             >
               <summary className="cursor-pointer">
-                <div className="text-xl font-semibold">
+                <div className={STYLES.cardTitle}>
                   {theme.title}
                 </div>
 
-                <p className="mt-2 text-sm text-gray-600">
+                <p className="mt-2 text-sm text-[color:var(--color-text-muted)]">
                   {theme.articles.length} artículos asociados
                 </p>
               </summary>
 
               <div className="mt-6 flex flex-col gap-2">
                 {theme.articles.length === 0 && (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-[color:var(--color-text-muted)]">
                     Este tema aún no tiene artículos asociados.
                   </p>
                 )}
@@ -160,10 +165,12 @@ export default function ExplorarPage() {
                   <Link
                     key={`${theme.id}-${articleId}`}
                     href={`/articulo/${articleId}`}
-                    className="rounded-lg border p-3 hover:bg-gray-50"
+                    className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
                   >
-                    <div className="text-sm text-gray-500">
-                      Artículo {articleId}
+                    <div className="text-sm text-[color:var(--color-text-muted)]">
+                      {articleNumeroById.get(articleId)
+                        ? `Artículo ${articleNumeroById.get(articleId)}`
+                        : "Preámbulo"}
                     </div>
 
                     <div className="font-medium">
@@ -175,6 +182,7 @@ export default function ExplorarPage() {
             </details>
           ))}
       </div>
+      </section>
     </main>
   );
 }

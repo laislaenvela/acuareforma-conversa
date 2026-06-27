@@ -3,6 +3,7 @@ import ParticipationGate from "../../../components/ParticipationGate";
 import { getArticles, getArticleById, getChapters } from "../../lib/data";
 import type { Metadata } from "next";
 import { createArticleMetadata } from "../../lib/metadata";
+import { STYLES } from "../../lib/styles";
 
 type Props = {
   params: Promise<{
@@ -40,8 +41,10 @@ export default async function ArticuloPage({
 
 if (!article) {
   return (
-    <main className="p-8">
-      <h1>Artículo no encontrado</h1>
+    <main className={STYLES.page}>
+      <section className={`${STYLES.container} py-12 md:py-16`}>
+      <h1 className={STYLES.h1}>Artículo no encontrado</h1>
+      </section>
     </main>
   );
 }
@@ -66,44 +69,46 @@ const nextArticle =
     ? articles[articleIndex + 1]
     : null;
   return (
-    <main className="mx-auto max-w-5xl p-8">
+    <main className={STYLES.page}>
+      <section className="mx-auto w-full max-w-5xl px-6 py-12 md:px-8 md:py-16">
 
-      <h1 className="text-4xl font-bold">
-  {article.title}
+      <h1 className={STYLES.h1}>
+  {article.numero
+    ? `Artículo ${article.numero} · ${article.title}`
+    : article.title}
 </h1>
 
-<p className="mt-3 text-lg text-gray-600">
-  {article.numero
-    ? `Artículo ${article.numero}`
-    : "Preámbulo"}
+<p className={`${STYLES.subtitle} mt-4 max-w-4xl`}>
+  Aquí encontrarás una explicación clara de este artículo, una comparación entre el texto
+  vigente y la propuesta, y el contexto del cambio para que puedas participar con mejor base.
 </p>
 
-<p className="mt-2 text-sm text-gray-500">
+<p className="mt-2 text-sm text-[color:var(--color-text-muted)]">
   Capítulo {chapter?.number} · {chapter?.title}
 </p>
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold">
+      <section className={STYLES.sectionAlt}>
+        <h2 className={STYLES.h2}>
           ¿Qué cambia?
         </h2>
 
-        <div className="mt-4 grid gap-6 md:grid-cols-2">
+        <div className={`mt-4 ${STYLES.grid2}`}>
 
-          <div className="rounded-xl border p-6">
-            <h3 className="font-semibold">
+          <div className={STYLES.card}>
+            <h3 className={STYLES.h3}>
               Texto vigente
             </h3>
 
-            <p className="mt-3 text-sm text-gray-700">
+            <p className={`${STYLES.body} mt-3`}>
               {article.currentText}
             </p>
           </div>
 
-          <div className="rounded-xl border p-6">
-            <h3 className="font-semibold">
+          <div className={STYLES.card}>
+            <h3 className={STYLES.h3}>
               Texto propuesto
             </h3>
 
-            <p className="mt-3 text-sm text-gray-700">
+            <p className={`${STYLES.body} mt-3`}>
               {article.proposedText}
             </p>
           </div>
@@ -111,22 +116,22 @@ const nextArticle =
         </div>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold">
+      <section className={STYLES.sectionPlain}>
+        <h2 className={STYLES.h2}>
           ¿Por qué se propone este cambio?
         </h2>
 
-        <p className="mt-4 text-gray-700">
+        <p className={`${STYLES.body} mt-4`}>
           {article.rationale}
         </p>
       </section>
 
-      <section className="mt-10">
-        <h2 className="text-2xl font-semibold">
+      <section className={STYLES.sectionWarm}>
+        <h2 className={STYLES.h2}>
           Pregunta para la comunidad
         </h2>
 
-        <p className="mt-4 text-gray-700">
+        <p className={`${STYLES.body} mt-4`}>
           {article.communityQuestion}
         </p>
       </section>
@@ -136,17 +141,17 @@ const nextArticle =
   articleId={article.id}
   articleTitle={article.title}
 />
-      <div className="mt-12 border-t pt-8">
+        <div className={`${STYLES.sectionAlt} ${STYLES.divider}`}>
 
   <div className="flex flex-col gap-4 text-center">
 
     {previousArticle && (
       <Link
         href={`/articulo/${previousArticle.id}`}
-        className="rounded-lg border p-3 hover:bg-gray-50"
+        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
       >
         ← Artículo anterior
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-[color:var(--color-text-muted)]">
           {previousArticle.title}
         </div>
       </Link>
@@ -154,7 +159,7 @@ const nextArticle =
 
     <Link
       href="/explorar"
-      className="rounded-lg border p-3 hover:bg-gray-50"
+      className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
     >
       Volver a la propuesta
     </Link>
@@ -162,10 +167,10 @@ const nextArticle =
     {nextArticle && (
       <Link
         href={`/articulo/${nextArticle.id}`}
-        className="rounded-lg border p-3 hover:bg-gray-50"
+        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
       >
         Artículo siguiente →
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-[color:var(--color-text-muted)]">
           {nextArticle.title}
         </div>
       </Link>
@@ -175,6 +180,7 @@ const nextArticle =
 
 </div>
 
+      </section>
     </main>
   );
 

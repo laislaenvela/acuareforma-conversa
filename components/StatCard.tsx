@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { STYLES } from "@/app/lib/styles";
 
 type StatCardProps = {
   label: string;
@@ -22,12 +23,12 @@ const StatCard = memo(function StatCard({
       : "p-4";
 
   return (
-    <div className={`rounded-xl border ${containerClasses}`}>
-      <div className="text-sm text-gray-500">
+    <div className={`${STYLES.card} ${containerClasses}`}>
+      <div className={STYLES.cardLabel}>
         {label}
       </div>
 
-      <div className={`mt-2 ${sizeClasses}`}>
+      <div className={`mt-4 ${sizeClasses}`}>
         {value}
       </div>
     </div>

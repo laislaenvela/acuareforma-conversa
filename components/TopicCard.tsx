@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { STYLES } from "@/app/lib/styles";
 
 type TopicCardProps = {
   title: string;
@@ -10,10 +11,10 @@ const TopicCard = memo(function TopicCard({
   description,
 }: TopicCardProps) {
   return (
-    <div className="rounded-xl border p-6 shadow-sm">
-      <h3 className="text-xl font-semibold">{title}</h3>
+    <div className={STYLES.card}>
+      <h3 className={STYLES.cardTitle}>{title}</h3>
 
-      <p className="mt-2 text-gray-600">
+      <p className={STYLES.cardBody}>
         {description}
       </p>
     </div>
