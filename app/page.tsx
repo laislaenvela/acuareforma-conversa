@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
-import { articles } from "./data/proposal.mock";
 import Link from "next/link";
 import type { Contribution } from "./lib/types";
 import { getContributions } from "./lib/storage";
+import { getArticles } from "./lib/data";
+import type { Article } from "./lib/types";
 import { 
   getUniqueUsers, 
   getUniqueArticles, 
@@ -13,11 +14,21 @@ import {
 } from "./lib/calculations";
 
 export default function Home() {
-  const [contributions, setContributions] =
-    useState<Contribution[]>([]);
+  const [contributions] =
+    useState<Contribution[]>(() => getContributions());
+  const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    setContributions(getContributions());
+    const loadArticles = async () => {
+      try {
+        const loadedArticles = await getArticles();
+        setArticles(loadedArticles);
+      } catch (error) {
+        console.error("Error loading articles:", error);
+      }
+    };
+
+    loadArticles();
   }, []);
 
   const uniqueUsers = useMemo(() => 
@@ -57,7 +68,7 @@ export default function Home() {
 
   const articlesWithoutContributions = useMemo(() =>
     getArticlesWithoutContributions(articles, contributions),
-    [contributions]
+    [articles, contributions]
   );
 
   return (
@@ -221,7 +232,12 @@ export default function Home() {
 
   ) : (
 
-    <div className="mt-6 flex flex-col gap-3">
+    <details className="mt-6 rounded-lg border p-4">
+      <summary className="cursor-pointer font-semibold">
+        Ver pendientes ({articlesWithoutContributions.length})
+      </summary>
+
+      <div className="mt-4 flex flex-col gap-3">
 
       {articlesWithoutContributions.map(
         (article) => (
@@ -243,7 +259,8 @@ export default function Home() {
         )
       )}
 
-    </div>
+      </div>
+    </details>
 
   )}
 

@@ -2,28 +2,37 @@
 
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
-import { articles } from "../data/proposal.mock";
-import type { Participant, Contribution } from "../lib/types";
+import type { Participant, Contribution, Article } from "../lib/types";
 import { 
   getParticipant, 
   saveParticipant as saveParticipantToStorage, 
   clearParticipant as clearParticipantFromStorage,
   getContributions 
 } from "../lib/storage";
+import { getArticles } from "../lib/data";
 
 export default function ParticipacionPage() {
   const [participant, setParticipant] =
-    useState<Participant | null>(null);
-  const [contributions, setContributions] =
-    useState<Contribution[]>([]);
+    useState<Participant | null>(() => getParticipant());
+  const [contributions] =
+    useState<Contribution[]>(() => getContributions());
+  const [articles, setArticles] = useState<Article[]>([]);
 
   const [fullName, setFullName] = useState("");
   const [userNumber, setUserNumber] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    setParticipant(getParticipant());
-    setContributions(getContributions());
+    const loadArticles = async () => {
+      try {
+        const loadedArticles = await getArticles();
+        setArticles(loadedArticles);
+      } catch (error) {
+        console.error("Error loading articles:", error);
+      }
+    };
+
+    loadArticles();
   }, []);
 
   function saveParticipant() {

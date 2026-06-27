@@ -28,6 +28,13 @@ export type Chapter = {
   articles?: { id: number; title: string }[];
 };
 
+export type Theme = {
+  id: number;
+  title: string;
+  slug: string;
+  articles: number[];
+};
+
 
 // ============================================================
 // INTERFACES DE BASE DE DATOS (directas de Supabase)
@@ -56,6 +63,19 @@ export interface CapituloDB {
   slug: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface TemaDB {
+  id: number;
+  nombre: string;
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ArticuloTemaDB {
+  articulo_id: number;
+  tema_id: number;
 }
 
 export type Participant = {

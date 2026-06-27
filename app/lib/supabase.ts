@@ -1,5 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
-import type { ArticuloDB, CapituloDB } from "./types";
+import type {
+  ArticuloDB,
+  CapituloDB,
+  TemaDB,
+  ArticuloTemaDB,
+} from "./types";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -109,4 +114,41 @@ export async function fetchCapituloById(id: number): Promise<CapituloDB | null> 
   }
 
   return data;
+}
+
+// ============================================================
+// TEMAS
+// ============================================================
+
+/**
+ * Obtiene todos los temas
+ */
+export async function fetchTemas(): Promise<TemaDB[]> {
+  const { data, error } = await supabase
+    .from("temas")
+    .select("*")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("Error fetching temas:", error);
+    throw error;
+  }
+
+  return data || [];
+}
+
+/**
+ * Obtiene relación artículo-tema
+ */
+export async function fetchArticulosTemas(): Promise<ArticuloTemaDB[]> {
+  const { data, error } = await supabase
+    .from("articulos_temas")
+    .select("articulo_id, tema_id");
+
+  if (error) {
+    console.error("Error fetching articulos_temas:", error);
+    throw error;
+  }
+
+  return data || [];
 }

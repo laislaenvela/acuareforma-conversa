@@ -48,9 +48,6 @@ if (!article) {
 
 const chapters = await getChapters();
 
-console.log(article);
-console.log(chapters);
-
 const chapter = chapters.find(
   (c) => c.id === article.chapterId
 );

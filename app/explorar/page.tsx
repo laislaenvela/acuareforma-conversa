@@ -1,33 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { getChapters } from "../lib/data";
-import { themes, chapters as defaultChapters } from "../data/proposal.mock";
+import { getArticles, getChapters, getThemes } from "../lib/data";
+import type { Article, Chapter, Theme } from "../lib/types";
 
 export default function ExplorarPage() {
   const [view, setView] = useState("chapters");
-  const [chapters, setChapters] = useState(defaultChapters);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [themes, setThemes] = useState<Theme[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const articleTitleById = useMemo(
+    () => new Map(articles.map((article) => [article.id, article.title])),
+    [articles]
+  );
+
   useEffect(() => {
-  const loadChapters = async () => {
-    try {
-      const loadedChapters = await getChapters();
+    const loadData = async () => {
+      try {
+        const [loadedChapters, loadedThemes, loadedArticles] = await Promise.all([
+          getChapters(),
+          getThemes(),
+          getArticles(),
+        ]);
 
-alert(JSON.stringify(loadedChapters, null, 2));
+        setChapters(loadedChapters);
+        setThemes(loadedThemes);
+        setArticles(loadedArticles);
+      } catch (error) {
+        console.error("Error loading exploration data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-setChapters(loadedChapters);
-    } catch (error) {
-      console.error("Error loading chapters:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  loadChapters();
-}, []);
-console.log(chapters);
+    loadData();
+  }, []);
   return (
     <main className="mx-auto max-w-6xl p-8">
       <h1 className="text-4xl font-bold">
@@ -63,6 +73,13 @@ console.log(chapters);
       </div>
 
       <div className="mt-10 grid gap-4">
+        {loading && view === "chapters" && (
+          <p className="text-gray-500">Cargando capítulos...</p>
+        )}
+
+        {loading && view === "themes" && (
+          <p className="text-gray-500">Cargando temas...</p>
+        )}
 
         {view === "chapters" &&
   chapters.map((chapter) => (
@@ -96,7 +113,7 @@ console.log(chapters);
   </h3>
 
   <div className="flex flex-col gap-2">
-    {chapter.articles.map((article) => (
+    {(chapter.articles ?? []).map((article) => (
       <Link
         key={article.id}
         href={`/articulo/${article.id}`}
@@ -118,18 +135,44 @@ console.log(chapters);
 
         {view === "themes" &&
           themes.map((theme) => (
-            <div
+            <details
               key={theme.id}
               className="rounded-xl border p-6"
             >
-              <h2 className="text-xl font-semibold">
-                {theme.title}
-              </h2>
+              <summary className="cursor-pointer">
+                <div className="text-xl font-semibold">
+                  {theme.title}
+                </div>
 
-              <p className="mt-2 text-gray-600">
-                {theme.articles.length} artículos asociados
-              </p>
-            </div>
+                <p className="mt-2 text-sm text-gray-600">
+                  {theme.articles.length} artículos asociados
+                </p>
+              </summary>
+
+              <div className="mt-6 flex flex-col gap-2">
+                {theme.articles.length === 0 && (
+                  <p className="text-sm text-gray-500">
+                    Este tema aún no tiene artículos asociados.
+                  </p>
+                )}
+
+                {theme.articles.map((articleId) => (
+                  <Link
+                    key={`${theme.id}-${articleId}`}
+                    href={`/articulo/${articleId}`}
+                    className="rounded-lg border p-3 hover:bg-gray-50"
+                  >
+                    <div className="text-sm text-gray-500">
+                      Artículo {articleId}
+                    </div>
+
+                    <div className="font-medium">
+                      {articleTitleById.get(articleId) || "Título no disponible"}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </details>
           ))}
       </div>
     </main>
