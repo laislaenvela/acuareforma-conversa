@@ -79,12 +79,13 @@ export function getUserContributions(
 /**
  * Get count of articles without contributions
  */
-export function getArticlesWithoutContributions(
-  allArticles: Array<{ id: number; title: string }>,
+export function getArticlesWithoutContributions<T extends { id: number }>(
+  allArticles: T[],
   contributions: Contribution[]
-): Array<{ id: number; title: string }> {
+): T[] {
   return allArticles.filter(
     (article) =>
       !contributions.some((contribution) => contribution.articleId === article.id)
   );
 }
+
