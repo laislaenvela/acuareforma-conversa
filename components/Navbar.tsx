@@ -2,23 +2,33 @@
 
 import Link from "next/link";
 import { useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
+import { STYLES } from "@/app/lib/styles";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = useCallback(() => {
     setOpen((prev) => !prev);
   }, []);
 
+  const getLinkClass = (href: string) => {
+    const isActive = pathname === href;
+    return isActive
+      ? "font-semibold text-[color:var(--color-primary-dark)]"
+      : STYLES.navLink;
+  };
+
   return (
-    <nav className="border-b">
-      <div className="mx-auto max-w-6xl p-4">
+    <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface)]">
+      <div className={`${STYLES.container} py-4`}>
 
         <div className="flex items-center justify-between">
 
           <Link
   href="/"
-  className="leading-none"
+  className="leading-none text-[color:var(--color-primary-dark)]"
 >
   <div className="font-bold text-xl">
     Acuareforma
@@ -31,23 +41,23 @@ export default function Navbar() {
 
           <button
             onClick={toggleMenu}
-            className="md:hidden text-2xl"
+            className="text-2xl text-[color:var(--color-primary-dark)] md:hidden"
           >
             ☰
           </button>
 
-          <div className="hidden md:flex gap-6">
-            <Link href="/">Inicio</Link>
+          <div className="hidden gap-6 text-sm font-medium md:flex">
+            <Link href="/" className={getLinkClass("/")}>Inicio</Link>
 
-            <Link href="/explorar">
+            <Link href="/explorar" className={getLinkClass("/explorar")}>
               Explorar la propuesta
             </Link>
 
-            <Link href="/participacion">
+            <Link href="/participacion" className={getLinkClass("/participacion")}>
               Participación
             </Link>
 
-            <Link href="/acerca">
+            <Link href="/acerca" className={getLinkClass("/acerca")}>
               Acerca
             </Link>
           </div>
@@ -55,21 +65,21 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div className="mt-4 flex flex-col gap-3 md:hidden">
+          <div className="mt-4 flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-4 text-sm font-medium md:hidden">
 
-            <Link href="/">
+            <Link href="/" className={getLinkClass("/")}>
               Inicio
             </Link>
 
-            <Link href="/explorar">
+            <Link href="/explorar" className={getLinkClass("/explorar")}>
               Explorar la propuesta
             </Link>
 
-            <Link href="/participacion">
+            <Link href="/participacion" className={getLinkClass("/participacion")}>
               Participación
             </Link>
 
-            <Link href="/acerca">
+            <Link href="/acerca" className={getLinkClass("/acerca")}>
               Acerca
             </Link>
 

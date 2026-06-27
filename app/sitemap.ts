@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { articles, chapters, themes } from "./data/proposal";
+import { getArticles } from "./lib/data";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://acuareforma.local";
 
   const routes = [
@@ -30,6 +30,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
   ];
+
+  const articles = await getArticles();
 
   // Add all articles
   const articleRoutes = articles.map((article) => ({
