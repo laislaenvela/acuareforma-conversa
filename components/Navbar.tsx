@@ -16,13 +16,13 @@ export default function Navbar() {
   const getLinkClass = (href: string) => {
     const isActive = pathname === href;
     return isActive
-      ? "font-semibold text-[color:var(--color-primary-dark)]"
+      ? "font-[family-name:var(--font-display)] text-[15px] font-semibold text-[color:var(--color-primary)] underline decoration-[3px] underline-offset-8"
       : STYLES.navLink;
   };
 
   return (
     <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface)]">
-      <div className={`${STYLES.container} py-4`}>
+      <div className={`${STYLES.container} py-5`}>
 
         <div className="flex items-center justify-between">
 
@@ -30,11 +30,11 @@ export default function Navbar() {
   href="/"
   className="leading-none text-[color:var(--color-primary-dark)]"
 >
-  <div className="font-bold text-xl">
+  <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
     Acuareforma
   </div>
 
-  <div className="font-bold text-xl">
+  <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
     conversa
   </div>
 </Link>
@@ -46,7 +46,7 @@ export default function Navbar() {
             ☰
           </button>
 
-          <div className="hidden gap-6 text-sm font-medium md:flex">
+          <div className="hidden gap-8 md:flex">
             <Link href="/" className={getLinkClass("/")}>Inicio</Link>
 
             <Link href="/explorar" className={getLinkClass("/explorar")}>
@@ -65,7 +65,7 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <div className="mt-4 flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-4 text-sm font-medium md:hidden">
+          <div className="mt-4 flex flex-col gap-3 border-t border-[color:var(--color-border)] pt-4 md:hidden">
 
             <Link href="/" className={getLinkClass("/")}>
               Inicio
