@@ -1,10 +1,8 @@
-import Link from "next/link";
-import ParticipationGate from "../../../components/ParticipationGate";
-import ArticleText from "../../../components/ArticleText";
 import { getArticles, getArticleById, getChapters } from "../../lib/data";
 import type { Metadata } from "next";
 import { createArticleMetadata } from "../../lib/metadata";
 import { STYLES } from "../../lib/styles";
+import ArticlePageClient from "./ArticlePageClient";
 
 type Props = {
   params: Promise<{
@@ -71,121 +69,26 @@ const nextArticle =
     : null;
   return (
     <main className={STYLES.page}>
-      <section className="mx-auto w-full max-w-5xl px-6 py-12 md:px-8 md:py-16">
-
-      <h1 className={STYLES.h1}>
-  {article.numero
-    ? `Artículo ${article.numero} · ${article.title}`
-    : article.title}
-</h1>
-
-<p className={`${STYLES.subtitle} mt-4 max-w-4xl`}>
-  Aquí encontrarás una explicación clara de este artículo, una comparación entre el texto
-  vigente y la propuesta, y el contexto del cambio para que puedas participar con mejor base.
-</p>
-
-<p className="mt-2 text-sm text-[color:var(--color-text-muted)]">
-  Capítulo {chapter?.number} · {chapter?.title}
-</p>
-      <section className={STYLES.sectionAlt}>
-        <h2 className={STYLES.h2}>
-          ¿Qué cambia?
-        </h2>
-
-        <div className={`mt-4 ${STYLES.grid2}`}>
-
-          <div className={STYLES.card}>
-            <h3 className={STYLES.h3}>
-              Texto vigente
-            </h3>
-
-            <ArticleText
-              text={article.currentText}
-              className="mt-3"
-            />
-          </div>
-
-          <div className={STYLES.card}>
-            <h3 className={STYLES.h3}>
-              Texto propuesto
-            </h3>
-
-            <ArticleText
-              text={article.proposedText}
-              className="mt-3"
-            />
-          </div>
-
-        </div>
-      </section>
-
-      <section className={STYLES.sectionPlain}>
-        <h2 className={STYLES.h2}>
-          ¿Por qué se propone este cambio?
-        </h2>
-
-        <ArticleText
-          text={article.rationale}
-          className="mt-4"
-        />
-      </section>
-
-      <section className={STYLES.sectionWarm}>
-        <h2 className={STYLES.h2}>
-          Pregunta para la comunidad
-        </h2>
-
-        <ArticleText
-          text={article.communityQuestion}
-          className="mt-4"
-        />
-      </section>
-
-
-<ParticipationGate
-  articleId={article.id}
-  articleTitle={article.title}
-/>
-        <div className={`${STYLES.sectionAlt} ${STYLES.divider}`}>
-
-  <div className="flex flex-col gap-4 text-center">
-
-    {previousArticle && (
-      <Link
-        href={`/articulo/${previousArticle.id}`}
-        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
-      >
-        ← Artículo anterior
-        <div className="text-sm text-[color:var(--color-text-muted)]">
-          {previousArticle.title}
-        </div>
-      </Link>
-    )}
-
-    <Link
-      href="/explorar"
-      className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
-    >
-      Volver a la propuesta
-    </Link>
-
-    {nextArticle && (
-      <Link
-        href={`/articulo/${nextArticle.id}`}
-        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
-      >
-        Artículo siguiente →
-        <div className="text-sm text-[color:var(--color-text-muted)]">
-          {nextArticle.title}
-        </div>
-      </Link>
-    )}
-
-  </div>
-
-</div>
-
-      </section>
+      <ArticlePageClient
+        article={article}
+        chapterLabel={`Capítulo ${chapter?.number} · ${chapter?.title}`}
+        previousArticle={
+          previousArticle
+            ? {
+                id: previousArticle.id,
+                title: previousArticle.title,
+              }
+            : null
+        }
+        nextArticle={
+          nextArticle
+            ? {
+                id: nextArticle.id,
+                title: nextArticle.title,
+              }
+            : null
+        }
+      />
     </main>
   );
 

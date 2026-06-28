@@ -11,11 +11,18 @@ import { STYLES } from "@/app/lib/styles";
 type ParticipationGateProps = {
   articleId: number;
   articleTitle: string;
+  nextArticle: {
+    id: number;
+    title: string;
+  } | null;
+  onCompletionChange?: (completed: boolean) => void;
 };
 
 export default function ParticipationGate({
   articleId,
   articleTitle,
+  nextArticle,
+  onCompletionChange,
 }: ParticipationGateProps) {
   const [participant, setParticipant] =
     useState<Participant | null>(null);
@@ -47,6 +54,10 @@ const [isSubmitting, setIsSubmitting] =
     setParticipant(getParticipant());
     setLoaded(true);
   }, []);
+
+  useEffect(() => {
+    onCompletionChange?.(submitted);
+  }, [submitted, onCompletionChange]);
 
   async function handleSubmit() {
     if (!participant?.email || !participant.fullName || !participant.userNumber) {
@@ -147,17 +158,32 @@ const [isSubmitting, setIsSubmitting] =
   }
 if (submitted) {
   return (
-    <section className={`mt-12 ${STYLES.card}`}>
+    <section className="mt-8 flex min-h-[55vh] items-center justify-center md:mt-12">
+      <div className="w-full max-w-3xl rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-background-alt)] px-6 py-10 shadow-[10px_10px_0_var(--color-primary-dark)] md:px-10 md:py-14">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-community)] text-[color:var(--color-primary-dark)] md:h-16 md:w-16" aria-hidden="true">
+          <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 7L9 18l-5-5" />
+          </svg>
+        </div>
 
-      <h2 className={STYLES.h2}>
-        Gracias por participar
-      </h2>
+        <h2 className="mt-6 text-center font-[family-name:var(--font-display)] text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-[color:var(--color-primary-dark)] md:text-[42px]">
+          ¡Gracias por participar!
+        </h2>
 
-      <p className="mt-4 text-[color:var(--color-text-muted)]">
-        Tu aporte fue guardado correctamente.
-      </p>
+        <p className="mx-auto mt-4 max-w-2xl text-center text-[17px] leading-[1.7] text-[color:var(--color-text-muted)] md:text-[18px]">
+          Tu aporte fue registrado correctamente y hará parte del proceso de revisión de la propuesta. Puedes continuar revisando otros artículos o realizar otro aporte sobre este mismo si lo consideras necesario.
+        </p>
 
-      <div className="mt-6 flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-3">
+
+        {nextArticle ? (
+          <Link
+            href={`/articulo/${nextArticle.id}`}
+            className={`${STYLES.buttonPrimary} text-center`}
+          >
+            Continuar con el siguiente artículo
+          </Link>
+        ) : null}
 
         <button
           onClick={() => {
@@ -171,18 +197,19 @@ if (submitted) {
             setJustification("");
             setAlternativeText("");
           }}
-          className={STYLES.buttonPrimary}
+          className={STYLES.buttonSecondary}
         >
           Hacer otro aporte sobre este artículo
         </button>
 
         <Link
-  href="/participacion"
-  className={`${STYLES.buttonSecondary} text-center`}
->
-  Ir a Mi participación
-</Link>
+          href="/explorar"
+          className={`${STYLES.buttonSecondary} text-center`}
+        >
+          Volver a explorar la propuesta
+        </Link>
 
+        </div>
       </div>
 
     </section>
