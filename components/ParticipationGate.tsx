@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
-import { getParticipant, addContribution } from "@/app/lib/storage";
+import { getParticipant } from "@/app/lib/storage";
+import { registrarAporte } from "@/app/lib/data";
 import { STYLES } from "@/app/lib/styles";
 
 type ParticipationGateProps = {
@@ -85,7 +86,24 @@ const [isSubmitting, setIsSubmitting] =
         createdAt: new Date().toISOString(),
       };
 
-      addContribution(newContribution);
+      const aportePayload = {
+        participant: {
+          name: participant.fullName,
+          userCode: participant.userNumber,
+          email: participant.email,
+        },
+        contribution: {
+          articleId: newContribution.articleId,
+          type: newContribution.contributionType,
+          position: newContribution.position,
+          content: newContribution.comment,
+          justification: newContribution.justification,
+          proposedText: newContribution.alternativeText,
+          anonymous: false,
+        },
+      };
+
+      await registrarAporte(aportePayload);
 
       setPosition("");
       setContributionType("");
