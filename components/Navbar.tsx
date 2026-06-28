@@ -16,12 +16,12 @@ export default function Navbar() {
   const getLinkClass = (href: string) => {
     const isActive = pathname === href;
     return isActive
-      ? "font-[family-name:var(--font-display)] text-[15px] font-semibold text-[color:var(--color-primary)] underline decoration-[3px] underline-offset-8"
+      ? "inline-flex border-b-2 border-[color:var(--color-primary)] pb-1 font-[family-name:var(--font-display)] text-[15px] font-semibold text-[color:var(--color-primary)]"
       : STYLES.navLink;
   };
 
   return (
-    <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface)]">
+    <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface)] shadow-[0_2px_0_var(--color-primary-dark)]">
       <div className={`${STYLES.container} py-5`}>
 
         <div className="flex items-center justify-between">
