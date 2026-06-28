@@ -12,7 +12,7 @@ export const STYLES = {
   h1: "font-[family-name:var(--font-display)] text-[40px] font-extrabold leading-[0.95] tracking-[-0.03em] text-[color:var(--color-primary-dark)] md:text-[56px] lg:text-[64px]",
   h2: "font-[family-name:var(--font-display)] text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-[color:var(--color-primary-dark)] md:text-[40px]",
   h3: "font-[family-name:var(--font-display)] text-[22px] font-semibold leading-[1.15] text-[color:var(--color-primary-dark)] md:text-[24px]",
-  body: "font-[family-name:var(--font-body)] text-[17px] leading-[1.7] text-[color:var(--color-text)] md:text-[18px]",
+  body: "font-[family-name:var(--font-body)] text-[17px] leading-[1.8] tracking-[0.01em] text-[color:var(--color-text)] md:text-[18px]",
   subtitle: "font-[family-name:var(--font-body)] text-[15px] leading-[1.7] text-[color:var(--color-text-muted)] md:text-[16px]",
   card: "rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-primary-dark)]",
   cardSelected:

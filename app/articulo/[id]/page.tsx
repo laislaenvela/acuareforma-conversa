@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ParticipationGate from "../../../components/ParticipationGate";
+import ArticleText from "../../../components/ArticleText";
 import { getArticles, getArticleById, getChapters } from "../../lib/data";
 import type { Metadata } from "next";
 import { createArticleMetadata } from "../../lib/metadata";
@@ -98,9 +99,10 @@ const nextArticle =
               Texto vigente
             </h3>
 
-            <p className={`${STYLES.body} mt-3`}>
-              {article.currentText}
-            </p>
+            <ArticleText
+              text={article.currentText}
+              className="mt-3"
+            />
           </div>
 
           <div className={STYLES.card}>
@@ -108,9 +110,10 @@ const nextArticle =
               Texto propuesto
             </h3>
 
-            <p className={`${STYLES.body} mt-3`}>
-              {article.proposedText}
-            </p>
+            <ArticleText
+              text={article.proposedText}
+              className="mt-3"
+            />
           </div>
 
         </div>
@@ -121,9 +124,10 @@ const nextArticle =
           ¿Por qué se propone este cambio?
         </h2>
 
-        <p className={`${STYLES.body} mt-4`}>
-          {article.rationale}
-        </p>
+        <ArticleText
+          text={article.rationale}
+          className="mt-4"
+        />
       </section>
 
       <section className={STYLES.sectionWarm}>
@@ -131,9 +135,10 @@ const nextArticle =
           Pregunta para la comunidad
         </h2>
 
-        <p className={`${STYLES.body} mt-4`}>
-          {article.communityQuestion}
-        </p>
+        <ArticleText
+          text={article.communityQuestion}
+          className="mt-4"
+        />
       </section>
 
 
