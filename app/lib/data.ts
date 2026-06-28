@@ -325,3 +325,20 @@ export async function getContributionsByArticle(
   const dbAportes = await fetchAportesByArticulo(articleId);
   return dbAportes.map(transformAporte);
 }
+
+export async function getParticipantContributionsByArticle(
+  email: string,
+  articleId: number
+): Promise<ContributionRecord[]> {
+  const participant = await getParticipantByEmail(email);
+
+  if (!participant) {
+    return [];
+  }
+
+  const articleContributions = await getContributionsByArticle(articleId);
+
+  return articleContributions.filter(
+    (contribution) => contribution.participantId === participant.id
+  );
+}

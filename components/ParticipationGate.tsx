@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
 import { getParticipant } from "@/app/lib/storage";
-import { registrarAporte } from "@/app/lib/data";
+import {
+  getParticipantContributionsByArticle,
+  registrarAporte,
+} from "@/app/lib/data";
 import { STYLES } from "@/app/lib/styles";
 
 type ParticipationGateProps = {
@@ -50,6 +53,9 @@ const [submitError, setSubmitError] =
 const [isSubmitting, setIsSubmitting] =
   useState(false);
 
+  const [articleParticipationCount, setArticleParticipationCount] =
+    useState<number | null>(null);
+
   useEffect(() => {
     setParticipant(getParticipant());
     setLoaded(true);
@@ -58,6 +64,39 @@ const [isSubmitting, setIsSubmitting] =
   useEffect(() => {
     onCompletionChange?.(submitted);
   }, [submitted, onCompletionChange]);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadParticipationStatus() {
+      if (!participant?.email) {
+        setArticleParticipationCount(null);
+        return;
+      }
+
+      try {
+        const contributions = await getParticipantContributionsByArticle(
+          participant.email,
+          articleId
+        );
+
+        if (!isCancelled) {
+          setArticleParticipationCount(contributions.length);
+        }
+      } catch (error) {
+        console.error("Error checking article participation status:", error);
+        if (!isCancelled) {
+          setArticleParticipationCount(null);
+        }
+      }
+    }
+
+    loadParticipationStatus();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [participant?.email, articleId]);
 
   async function handleSubmit() {
     if (!participant?.email || !participant.fullName || !participant.userNumber) {
@@ -220,7 +259,7 @@ if (submitted) {
       <section className={`mt-12 ${STYLES.card}`}>
 
         <h2 className={STYLES.h2}>
-          Participando como:
+          Mi participación
         </h2>
 
         <p className="mt-4 font-medium text-[color:var(--color-text)]">
@@ -230,6 +269,21 @@ if (submitted) {
         <p className="text-sm text-[color:var(--color-text-muted)]">
           Usuario {participant.userNumber}
         </p>
+
+        {articleParticipationCount && articleParticipationCount > 0 ? (
+          <div className="mt-4 rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-background)] p-4">
+            <p className="text-sm font-medium text-[color:var(--color-primary-dark)]">
+              ✓ Ya participaste en este artículo.
+            </p>
+
+            <button
+              type="button"
+              className="mt-2 text-sm font-medium text-[color:var(--color-primary-dark)] underline decoration-[color:var(--color-border)] underline-offset-4 transition-colors duration-150 hover:text-[color:var(--color-primary)]"
+            >
+              {articleParticipationCount > 1 ? "Ver mis aportes" : "Ver mi aporte"}
+            </button>
+          </div>
+        ) : null}
 
       </section>
 
