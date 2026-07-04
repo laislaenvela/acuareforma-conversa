@@ -419,3 +419,58 @@ export async function getParticipantContributionsByEmail(
     createdAt: dbAporte.created_at || new Date(0).toISOString(),
   }));
 }
+
+export async function getAllContributions(): Promise<Contribution[]> {
+  const { data: dbAportes, error } = await supabase
+    .from("aportes")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching all aportes:", error);
+    throw error;
+  }
+
+  const [articles, participantsResult] = await Promise.all([
+    getArticles(),
+    supabase
+      .from("participantes")
+      .select("id, nombre, codigo_usuario"),
+  ]);
+
+  if (participantsResult.error) {
+    console.error("Error fetching participantes for contributions:", participantsResult.error);
+    throw participantsResult.error;
+  }
+
+  const articleTitleById = new Map(
+    articles.map((article) => [article.id, article.title])
+  );
+
+  const participantById = new Map(
+    (participantsResult.data || []).map((participant) => [
+      participant.id,
+      {
+        name: participant.nombre,
+        userCode: participant.codigo_usuario,
+      },
+    ])
+  );
+
+  return (dbAportes || []).map((dbAporte) => {
+    const participant = participantById.get(dbAporte.participante_id);
+
+    return {
+      articleId: dbAporte.articulo_id,
+      articleTitle: articleTitleById.get(dbAporte.articulo_id) || "",
+      participantName: participant?.name,
+      participantUser: participant?.userCode,
+      position: denormalizeAportePosicion(String(dbAporte.posicion)) as Contribution["position"],
+      contributionType: denormalizeAporteTipo(String(dbAporte.tipo)) as Contribution["contributionType"],
+      comment: dbAporte.contenido || "",
+      justification: dbAporte.justificacion || "",
+      alternativeText: dbAporte.propuesta_redaccion || "",
+      createdAt: dbAporte.created_at || new Date(0).toISOString(),
+    };
+  });
+}

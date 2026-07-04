@@ -2,8 +2,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import type { Contribution } from "./lib/types";
-import { getContributions } from "./lib/storage";
-import { getArticles } from "./lib/data";
+import { getArticles, getAllContributions } from "./lib/data";
 import type { Article } from "./lib/types";
 import { STYLES } from "./lib/styles";
 import { MessageCircle, Users, FileText, ArrowRight } from "lucide-react";
@@ -16,8 +15,8 @@ import {
 } from "./lib/calculations";
 
 export default function Home() {
-  const [contributions] =
-    useState<Contribution[]>(() => getContributions());
+  const [contributions, setContributions] =
+    useState<Contribution[]>([]);
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
@@ -31,6 +30,32 @@ export default function Home() {
     };
 
     loadArticles();
+  }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadContributions = async () => {
+      try {
+        const loadedContributions = await getAllContributions();
+
+        if (!isCancelled) {
+          setContributions(loadedContributions);
+        }
+      } catch (error) {
+        console.error("Error loading contributions:", error);
+
+        if (!isCancelled) {
+          setContributions([]);
+        }
+      }
+    };
+
+    loadContributions();
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   const uniqueUsers = useMemo(() => 
