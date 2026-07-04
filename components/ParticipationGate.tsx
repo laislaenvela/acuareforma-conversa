@@ -282,12 +282,12 @@ if (submitted) {
               ✓ Ya participaste en este artículo.
             </p>
 
-            <button
-              type="button"
-              className="mt-2 text-sm font-medium text-[color:var(--color-primary-dark)] underline decoration-[color:var(--color-border)] underline-offset-4 transition-colors duration-150 hover:text-[color:var(--color-primary)]"
+            <Link
+              href="/participacion"
+              className="mt-2 inline-block text-sm font-medium text-[color:var(--color-primary-dark)] underline decoration-[color:var(--color-border)] underline-offset-4 transition-colors duration-150 hover:text-[color:var(--color-primary)]"
             >
               {articleParticipationCount > 1 ? "Ver mis aportes" : "Ver mi aporte"}
-            </button>
+            </Link>
           </div>
         ) : null}
 
