@@ -17,7 +17,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
