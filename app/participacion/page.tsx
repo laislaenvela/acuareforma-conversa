@@ -6,17 +6,16 @@ import type { Participant, Contribution, Article } from "../lib/types";
 import { 
   getParticipant, 
   saveParticipant as saveParticipantToStorage, 
-  clearParticipant as clearParticipantFromStorage,
-  getContributions 
+  clearParticipant as clearParticipantFromStorage
 } from "../lib/storage";
-import { getArticles } from "../lib/data";
+import { getArticles, getParticipantContributionsByEmail } from "../lib/data";
 import { STYLES } from "../lib/styles";
 
 export default function ParticipacionPage() {
   const [participant, setParticipant] =
     useState<Participant | null>(() => getParticipant());
-  const [contributions] =
-    useState<Contribution[]>(() => getContributions());
+  const [contributions, setContributions] =
+    useState<Contribution[]>([]);
   const [articles, setArticles] = useState<Article[]>([]);
 
   const [fullName, setFullName] = useState("");
@@ -35,6 +34,39 @@ export default function ParticipacionPage() {
 
     loadArticles();
   }, []);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadContributions() {
+      if (!participant?.email) {
+        setContributions([]);
+        return;
+      }
+
+      try {
+        const loadedContributions = await getParticipantContributionsByEmail(
+          participant.email
+        );
+
+        if (!isCancelled) {
+          setContributions(loadedContributions);
+        }
+      } catch (error) {
+        console.error("Error loading participant contributions:", error);
+
+        if (!isCancelled) {
+          setContributions([]);
+        }
+      }
+    }
+
+    loadContributions();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [participant?.email]);
 
   function saveParticipant() {
     const data = {

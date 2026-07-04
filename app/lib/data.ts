@@ -1,4 +1,5 @@
 import {
+  supabase,
   fetchArticulos,
   fetchArticuloById,
   fetchArticulosByCapitulo,
@@ -16,6 +17,7 @@ import type {
   Article,
   Chapter,
   Theme,
+  Contribution,
   ArticuloDB,
   CapituloDB,
   TemaDB,
@@ -128,6 +130,39 @@ function normalizeAportePosicion(value: string): string {
     "En desacuerdo": "en_desacuerdo",
     necesito_mas_informacion: "necesito_mas_informacion",
     "Necesito más información": "necesito_mas_informacion",
+  };
+
+  return map[value] ?? value;
+}
+
+function denormalizeAporteTipo(value: string): string {
+  const map: Record<string, string> = {
+    pregunta: "Pregunta",
+    Pregunta: "Pregunta",
+    observacion: "Observación",
+    Observacion: "Observación",
+    "Observación": "Observación",
+    riesgo_identificado: "Riesgo identificado",
+    "Riesgo identificado": "Riesgo identificado",
+    riesgo: "Riesgo identificado",
+    comentario_de_apoyo: "Comentario de apoyo",
+    "Comentario de apoyo": "Comentario de apoyo",
+    apoyo: "Comentario de apoyo",
+  };
+
+  return map[value] ?? value;
+}
+
+function denormalizeAportePosicion(value: string): string {
+  const map: Record<string, string> = {
+    de_acuerdo: "De acuerdo",
+    "De acuerdo": "De acuerdo",
+    parcialmente_de_acuerdo: "Parcialmente de acuerdo",
+    "Parcialmente de acuerdo": "Parcialmente de acuerdo",
+    en_desacuerdo: "En desacuerdo",
+    "En desacuerdo": "En desacuerdo",
+    necesito_mas_informacion: "Necesito más información",
+    "Necesito más información": "Necesito más información",
   };
 
   return map[value] ?? value;
@@ -341,4 +376,46 @@ export async function getParticipantContributionsByArticle(
   return articleContributions.filter(
     (contribution) => contribution.participantId === participant.id
   );
+}
+
+export async function getParticipantContributionsByEmail(
+  email: string
+): Promise<Contribution[]> {
+  const participant = await getParticipantByEmail(email);
+
+  if (!participant) {
+    return [];
+  }
+
+  const { data: dbAportes, error } = await supabase
+    .from("aportes")
+    .select("*")
+    .eq("participante_id", participant.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(
+      `Error fetching aportes for participante ${participant.id}:`,
+      error
+    );
+    throw error;
+  }
+
+  const articles = await getArticles();
+  const articleTitleById = new Map(
+    articles.map((article) => [article.id, article.title])
+  );
+
+  return (dbAportes || []).map((dbAporte) => ({
+    articleId: dbAporte.articulo_id,
+    articleTitle: articleTitleById.get(dbAporte.articulo_id) || "",
+    participantName: participant.name,
+    participantUser: participant.userCode,
+    position: denormalizeAportePosicion(String(dbAporte.posicion)) as Contribution["position"],
+    contributionType: denormalizeAporteTipo(String(dbAporte.tipo)) as Contribution["contributionType"],
+    comment: dbAporte.contenido || "",
+    justification: dbAporte.justificacion || "",
+    alternativeText: dbAporte.propuesta_redaccion || "",
+    createdAt: dbAporte.created_at || new Date(0).toISOString(),
+  }));
 }

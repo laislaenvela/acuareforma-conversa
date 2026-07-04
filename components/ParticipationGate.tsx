@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { Participant } from "@/app/lib/types";
 import { POSITION_OPTIONS, CONTRIBUTION_TYPE_OPTIONS } from "@/app/lib/types";
-import { getParticipant } from "@/app/lib/storage";
+import { getParticipant, saveParticipant as saveParticipantToStorage } from "@/app/lib/storage";
 import {
   getParticipantContributionsByArticle,
   registrarAporte,
@@ -154,6 +154,12 @@ const [isSubmitting, setIsSubmitting] =
       };
 
       await registrarAporte(aportePayload);
+
+      saveParticipantToStorage({
+        fullName: participant.fullName,
+        userNumber: participant.userNumber,
+        email: participant.email,
+      });
 
       setPosition("");
       setContributionType("");
