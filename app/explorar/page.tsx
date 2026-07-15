@@ -77,11 +77,11 @@ export default function ExplorarPage() {
 
       <div className={`${STYLES.sectionAlt} grid gap-4`}>
         {loading && view === "chapters" && (
-          <p className="text-[color:var(--color-text-muted)]">Cargando capítulos...</p>
+          <p className="text-[color:var(--color-text-secondary)]">Cargando capítulos...</p>
         )}
 
         {loading && view === "themes" && (
-          <p className="text-[color:var(--color-text-muted)]">Cargando temas...</p>
+          <p className="text-[color:var(--color-text-secondary)]">Cargando temas...</p>
         )}
 
         {view === "chapters" &&
@@ -101,7 +101,7 @@ export default function ExplorarPage() {
 </summary>
 <div className="mt-4">
   {chapter.previousTitle && (
-    <p className="text-sm text-[color:var(--color-text-muted)]">
+    <p className="text-sm text-[color:var(--color-text-secondary)]">
       <strong>Antes:</strong> {chapter.previousTitle}
     </p>
   )}
@@ -111,7 +111,7 @@ export default function ExplorarPage() {
 </div>
 
 <div className="mt-6">
-  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-muted)]">
+  <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[color:var(--color-text-secondary)]">
     Artículos incluidos
   </h3>
 
@@ -120,9 +120,9 @@ export default function ExplorarPage() {
       <Link
         key={article.id}
         href={`/articulo/${article.id}`}
-        className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
+        className="rounded-lg border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] p-3 transition-colors duration-150 hover:border-[color:var(--color-proposal)]"
       >
-        <div className="text-sm text-[color:var(--color-text-muted)]">
+        <div className="text-sm text-[color:var(--color-text-secondary)]">
           {articleNumeroById.get(article.id)
             ? `Artículo ${articleNumeroById.get(article.id)}`
             : "Preámbulo"}
@@ -149,14 +149,14 @@ export default function ExplorarPage() {
                   {theme.title}
                 </div>
 
-                <p className="mt-2 text-sm text-[color:var(--color-text-muted)]">
+                <p className="mt-2 text-sm text-[color:var(--color-text-secondary)]">
                   {theme.articles.length} artículos asociados
                 </p>
               </summary>
 
               <div className="mt-6 flex flex-col gap-2">
                 {theme.articles.length === 0 && (
-                  <p className="text-sm text-[color:var(--color-text-muted)]">
+                  <p className="text-sm text-[color:var(--color-text-secondary)]">
                     Este tema aún no tiene artículos asociados.
                   </p>
                 )}
@@ -165,9 +165,9 @@ export default function ExplorarPage() {
                   <Link
                     key={`${theme.id}-${articleId}`}
                     href={`/articulo/${articleId}`}
-                    className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
+                    className="rounded-lg border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] p-3 transition-colors duration-150 hover:border-[color:var(--color-proposal)]"
                   >
-                    <div className="text-sm text-[color:var(--color-text-muted)]">
+                    <div className="text-sm text-[color:var(--color-text-secondary)]">
                       {articleNumeroById.get(articleId)
                         ? `Artículo ${articleNumeroById.get(articleId)}`
                         : "Preámbulo"}

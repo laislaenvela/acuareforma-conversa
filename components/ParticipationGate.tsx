@@ -188,7 +188,7 @@ const [isSubmitting, setIsSubmitting] =
           Participación
         </h2>
 
-        <p className="mt-2 text-[color:var(--color-text-muted)]">
+        <p className="mt-2 text-[color:var(--color-text-secondary)]">
           Debes identificarte antes de participar.
         </p>
 
@@ -204,18 +204,18 @@ const [isSubmitting, setIsSubmitting] =
 if (submitted) {
   return (
     <section className="mt-8 flex min-h-[55vh] items-center justify-center md:mt-12">
-      <div className="w-full max-w-3xl rounded-3xl border border-[color:var(--color-border)] bg-[color:var(--color-background-alt)] px-6 py-10 shadow-[10px_10px_0_var(--color-primary-dark)] md:px-10 md:py-14">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-community)] text-[color:var(--color-primary-dark)] md:h-16 md:w-16" aria-hidden="true">
+      <div className="w-full max-w-3xl rounded-3xl border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] px-6 py-10 shadow-[10px_10px_0_var(--color-text-primary)] md:px-10 md:py-14">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-community)] text-[color:var(--color-text-primary)] md:h-16 md:w-16" aria-hidden="true">
           <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 7L9 18l-5-5" />
           </svg>
         </div>
 
-        <h2 className="mt-6 text-center font-[family-name:var(--font-display)] text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-[color:var(--color-primary-dark)] md:text-[42px]">
+        <h2 className="mt-6 text-center font-[family-name:var(--font-display)] text-[34px] font-bold leading-[1.05] tracking-[-0.02em] text-[color:var(--color-text-primary)] md:text-[42px]">
           ¡Gracias por participar!
         </h2>
 
-        <p className="mx-auto mt-4 max-w-2xl text-center text-[17px] leading-[1.7] text-[color:var(--color-text-muted)] md:text-[18px]">
+        <p className="mx-auto mt-4 max-w-2xl text-center text-[17px] leading-[1.7] text-[color:var(--color-text-secondary)] md:text-[18px]">
           Tu aporte fue registrado correctamente y hará parte del proceso de revisión de la propuesta. Puedes continuar revisando otros artículos o realizar otro aporte sobre este mismo si lo consideras necesario.
         </p>
 
@@ -268,23 +268,23 @@ if (submitted) {
           Mi participación
         </h2>
 
-        <p className="mt-4 font-medium text-[color:var(--color-text)]">
+        <p className="mt-4 font-medium text-[color:var(--color-text-primary)]">
           {participant.fullName}
         </p>
 
-        <p className="text-sm text-[color:var(--color-text-muted)]">
+        <p className="text-sm text-[color:var(--color-text-secondary)]">
           Usuario {participant.userNumber}
         </p>
 
         {articleParticipationCount && articleParticipationCount > 0 ? (
-          <div className="mt-4 rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-background)] p-4">
-            <p className="text-sm font-medium text-[color:var(--color-primary-dark)]">
+          <div className="mt-4 rounded-xl border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-secondary)] p-4">
+            <p className="text-sm font-medium text-[color:var(--color-text-primary)]">
               ✓ Ya participaste en este artículo.
             </p>
 
             <Link
               href="/participacion"
-              className="mt-2 inline-block text-sm font-medium text-[color:var(--color-primary-dark)] underline decoration-[color:var(--color-border)] underline-offset-4 transition-colors duration-150 hover:text-[color:var(--color-primary)]"
+              className="mt-2 inline-block text-sm font-medium text-[color:var(--color-text-primary)] underline decoration-[color:var(--color-border-default)] underline-offset-4 transition-colors duration-150 hover:text-[color:var(--color-proposal)]"
             >
               {articleParticipationCount > 1 ? "Ver mis aportes" : "Ver mi aporte"}
             </Link>
@@ -307,7 +307,7 @@ if (submitted) {
                 name="position"
                 value={pos}
                 onChange={(e) => setPosition(e.target.value)}
-                className="mt-1 accent-[color:var(--color-primary)]"
+                className="mt-1 accent-[color:var(--color-proposal)]"
               /> {pos}
             </label>
           ))}
@@ -321,7 +321,7 @@ if (submitted) {
           Comparte tu aporte
         </h2>
 
-        <p className="mt-2 text-[color:var(--color-text-muted)]">
+        <p className="mt-2 text-[color:var(--color-text-secondary)]">
           Comparte tu perspectiva sobre este artículo para enriquecer la conversación comunitaria.
         </p>
 
@@ -333,7 +333,7 @@ if (submitted) {
                 name="contribution"
                 value={type}
                 onChange={(e) => setContributionType(e.target.value)}
-                className="mt-1 accent-[color:var(--color-primary)]"
+                className="mt-1 accent-[color:var(--color-proposal)]"
               /> {type}
             </label>
           ))}
@@ -361,7 +361,7 @@ onChange={(e) => setAlternativeText(e.target.value)}
         />
 
         {submitError ? (
-          <p className="mt-4 text-sm text-[color:var(--color-primary-dark)]">
+          <p className="mt-4 text-sm text-[color:var(--color-text-primary)]">
             {submitError}
           </p>
         ) : null}

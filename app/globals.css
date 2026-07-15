@@ -1,18 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #0088d1;
-  --color-primary-dark: #12415c;
-  --color-community: #d4e167;
+  /* Marca / texto */
+  --color-primary: #4a6cf0;        /* navy: logo, títulos, texto de marca */
+  --color-primary-dark: #12203f;   /* navy oscuro: hover / énfasis */
+
+  /* Tarjetas de pasos (1-2-3) */
+  --color-step-blue: #4a6cf0;      /* Paso 1: Conoce la propuesta */
+  --color-step-blue-dark: #3c58d6;
+  --color-community: #a6a93b;      /* Paso 2: Participa */
+  --color-community-dark: #93962f;
+  --color-dialogue: #e8785c;       /* Paso 3: Dialoguemos */
+  --color-dialogue-dark: #d8664a;
+
+  /* Fondos */
   --color-background: #f5f7f8;
   --color-background-alt: #ffffff;
   --color-background-warm: #faf3e6;
   --color-sand: #faf3e6;
   --color-sand-deep: #e7d8bc;
   --color-surface: #ffffff;
+
+  /* UI */
   --color-border: #dbe4e8;
   --color-text: #1f2937;
   --color-text-muted: #6b7280;
+  --color-text-inverse: #ffffff;
+  --color-progress: #f9b043;
 }
 
 @theme inline {
@@ -25,7 +39,7 @@
 
 body {
   min-height: 100%;
-  background: var(--color-background);
+  background: var(--color-background-alt);
   color: var(--color-text);
   font-family: var(--font-body), sans-serif;
   font-size: 17px;
@@ -43,4 +57,75 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display), sans-serif;
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+/* ---------- Tarjetas de pasos ---------- */
+.step-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border-radius: 1rem;
+  color: var(--color-text-inverse);
+  border-color: transparent;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-2px);
+}
+
+.step-card__number {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.375rem;
+  font-weight: 800;
+  border-radius: 0.625rem;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.step-card__title {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.03rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.step-card__desc {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.step-card__desc strong {
+  color: var(--color-text-inverse);
+  font-weight: 700;
+}
+
+.step-card--blue {
+  background: var(--color-step-blue);
+}
+.step-card--blue:hover {
+  background: var(--color-step-blue-dark);
+}
+
+.step-card--community {
+  background: var(--color-community);
+}
+.step-card--community:hover {
+  background: var(--color-community-dark);
+}
+
+.step-card--dialogue {
+  background: var(--color-dialogue);
+}
+.step-card--dialogue:hover {
+  background: var(--color-dialogue-dark);
 }

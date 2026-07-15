@@ -149,7 +149,7 @@ export default function ParticipacionPage() {
 
       {!participant ? (
         <>
-        <div className="mt-8 flex flex-col gap-4 rounded-2xl bg-[color:var(--color-background-alt)] p-6 md:p-8">
+        <div className="mt-8 flex flex-col gap-4 rounded-2xl bg-[color:var(--color-surface-primary)] p-6 md:p-8">
 
           <input
             type="text"
@@ -176,7 +176,7 @@ export default function ParticipacionPage() {
               Número de usuario
             </label>
 
-            <p className="mt-1 text-sm leading-6 text-[color:var(--color-text-muted)]">
+            <p className="mt-1 text-sm leading-6 text-[color:var(--color-text-secondary)]">
               Código de usuario (aparece en la factura del servicio de agua). Escríbelo exactamente como aparece, incluyendo los ceros iniciales.
             </p>
           </div>
@@ -199,7 +199,7 @@ export default function ParticipacionPage() {
           </button>
 
         </div>
-        <p className="mt-4 text-sm leading-6 text-[color:var(--color-text-muted)]">
+        <p className="mt-4 text-sm leading-6 text-[color:var(--color-text-secondary)]">
           Tus datos serán utilizados únicamente para gestionar tu participación en el proceso
           de revisión de la reforma estatutaria. Puedes consultar aquí nuestra Política de
           Tratamiento de Datos.
@@ -216,11 +216,11 @@ export default function ParticipacionPage() {
             {participant.fullName}
           </p>
 
-          <p className="text-[color:var(--color-text-muted)]">
+          <p className="text-[color:var(--color-text-secondary)]">
             Usuario {participant.userNumber}
           </p>
 
-          <p className="text-[color:var(--color-text-muted)]">
+          <p className="text-[color:var(--color-text-secondary)]">
             {participant.email}
           </p>
 
@@ -283,7 +283,7 @@ export default function ParticipacionPage() {
         En desacuerdo
       </div>
 
-      <div className="text-3xl font-bold text-[color:var(--color-primary-dark)]">
+      <div className="text-3xl font-bold text-[color:var(--color-text-primary)]">
         {disagreedCount}
       </div>
     </div>
@@ -294,27 +294,27 @@ export default function ParticipacionPage() {
     <summary className="cursor-pointer list-none">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <div className="text-xs font-medium uppercase tracking-wide text-[color:var(--color-text-muted)]">
+          <div className="text-xs font-medium uppercase tracking-wide text-[color:var(--color-text-secondary)]">
             Pendientes por revisar
           </div>
-          <div className="mt-1 text-3xl font-bold text-[color:var(--color-primary-dark)]">
+          <div className="mt-1 text-3xl font-bold text-[color:var(--color-text-primary)]">
             {pendingArticleList.length}
           </div>
         </div>
 
-        <span className="text-sm font-medium text-[color:var(--color-text-muted)]">
+        <span className="text-sm font-medium text-[color:var(--color-text-secondary)]">
           Ver lista
         </span>
       </div>
     </summary>
 
-    <p className="mt-3 text-sm text-[color:var(--color-text-muted)]">
+    <p className="mt-3 text-sm text-[color:var(--color-text-secondary)]">
       Estos son los artículos que aún no tienen una participación registrada de tu parte.
       Selecciona uno para revisarlo y aportar.
     </p>
 
     {pendingArticleList.length === 0 ? (
-      <p className="mt-4 text-sm text-[color:var(--color-text-muted)]">
+      <p className="mt-4 text-sm text-[color:var(--color-text-secondary)]">
         Ya revisaste todos los artículos disponibles.
       </p>
     ) : (
@@ -323,13 +323,13 @@ export default function ParticipacionPage() {
           <Link
             key={article.id}
             href={`/articulo/${article.id}`}
-            className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-primary)]`}
+            className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-proposal)]`}
           >
-            <div className="text-sm text-[color:var(--color-text-muted)]">
+            <div className="text-sm text-[color:var(--color-text-secondary)]">
               Artículo {article.numero}
             </div>
 
-            <div className="mt-1 font-semibold text-[color:var(--color-primary-dark)]">
+            <div className="mt-1 font-semibold text-[color:var(--color-text-primary)]">
               {article.title}
             </div>
           </Link>
@@ -343,12 +343,12 @@ export default function ParticipacionPage() {
 
   <details className="mt-10">
 
-  <summary className="cursor-pointer text-2xl font-semibold text-[color:var(--color-primary-dark)]">
+  <summary className="cursor-pointer text-2xl font-semibold text-[color:var(--color-text-primary)]">
     Mis aportes ({userContributions.length})
   </summary>
 
   {userContributions.length === 0 ? (
-    <p className="mt-4 text-[color:var(--color-text-muted)]">
+    <p className="mt-4 text-[color:var(--color-text-secondary)]">
       Aún no has realizado aportes.
     </p>
   ) : (
@@ -360,7 +360,7 @@ export default function ParticipacionPage() {
             key={index}
             className={STYLES.card}
           >
-            <div className="text-sm text-[color:var(--color-text-muted)]">
+            <div className="text-sm text-[color:var(--color-text-secondary)]">
               {articleNumeroById.get(contribution.articleId)
                 ? `Artículo ${articleNumeroById.get(contribution.articleId)}`
                 : "Preámbulo"}
@@ -374,18 +374,18 @@ export default function ParticipacionPage() {
   {contribution.contributionType}
 </div>
 
-<div className="mt-1 text-xs text-[color:var(--color-text-muted)]">
+<div className="mt-1 text-xs text-[color:var(--color-text-secondary)]">
   {new Date(
     contribution.createdAt
   ).toLocaleString("es-CR")}
 </div>
 
-            <div className="mt-2 text-[color:var(--color-text)]">
+            <div className="mt-2 text-[color:var(--color-text-primary)]">
               {contribution.comment}
             </div>
             <Link
   href={`/articulo/${contribution.articleId}`}
-  className="mt-4 inline-block text-[color:var(--color-primary-dark)] transition-colors duration-150 hover:text-[color:var(--color-primary)]"
+  className="mt-4 inline-block text-[color:var(--color-text-primary)] transition-colors duration-150 hover:text-[color:var(--color-proposal)]"
 >
   Ver artículo →
 </Link>

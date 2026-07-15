@@ -21,14 +21,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-surface)] shadow-[0_2px_0_var(--color-primary-dark)]">
+    <nav className="border-b border-[color:var(--color-border)] bg-[color:var(--color-background)] shadow-[0_2px_0_var(--color-primary-dark)]">
       <div className={`${STYLES.container} py-5`}>
 
         <div className="flex items-center justify-between">
 
           <Link
   href="/"
-  className="leading-none text-[color:var(--color-primary-dark)]"
+  className="leading-none text-[color:var(--color-primary)]"
 >
   <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
     Acuareforma
@@ -41,9 +41,10 @@ export default function Navbar() {
 
           <button
             onClick={toggleMenu}
-            className="text-2xl text-[color:var(--color-primary-dark)] md:hidden"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            className="text-2xl text-[color:var(--color-primary)] md:hidden"
           >
-            ☰
+            {open ? "✕" : "☰"}
           </button>
 
           <div className="hidden gap-8 md:flex">

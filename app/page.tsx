@@ -103,51 +103,116 @@ export default function Home() {
     [articles]
   );
 
+  const primaryNavigationCards = [
+    {
+      number: "1",
+      title: "Explora la propuesta",
+      description:
+        "Recorre la propuesta por capítulos o temas.",
+      href: "/explorar",
+      colorClasses:
+        "border-[#4B63DA] bg-[#5C74E8] hover:bg-[#4F67DC]",
+      numberClasses: "text-white",
+      titleClasses: "",
+      titleColor: "var(--color-text-inverse)",
+      descriptionClasses: "text-white",
+      actionClasses: "text-white",
+    },
+    {
+      number: "2",
+      title: "Participa",
+      description:
+        "Comparte tus preguntas, observaciones y propuestas.",
+      href: "/participacion",
+      colorClasses:
+        "border-[#AFC23A] bg-[#C8DB46] hover:bg-[#BDD13F]",
+      numberClasses: "text-[#1F2B5B]",
+      titleClasses: "",
+      titleColor: "#1F2B5B",
+      descriptionClasses: "text-[#21305F]",
+      actionClasses: "text-[#1F2B5B]",
+    },
+    {
+      number: "3",
+      title: "Así va la participación",
+      description:
+        "Descubre cómo está participando la comunidad.",
+      href: "/#participacion-cifras",
+      colorClasses:
+        "border-[#D8673F] bg-[#ED7747] hover:bg-[#E06A3B]",
+      numberClasses: "text-white",
+      titleClasses: "",
+      titleColor: "var(--color-text-inverse)",
+      descriptionClasses: "text-white",
+      actionClasses: "text-white",
+    },
+  ] as const;
+
   return (
     <main className={STYLES.page}>
       <section className="bg-[color:var(--color-surface)]">
-        <div className={`${STYLES.container} py-16 md:py-20`}>
-          <div className="grid gap-10 lg:grid-cols-3 lg:items-start">
-            <div className="lg:col-span-2">
-              <h1 className={STYLES.h1}>
-                Comprender
-                <br />
-                para decidir
-                <br />
-                juntos.
-              </h1>
+        <div className={`${STYLES.container} pb-10 pt-10 md:pb-14 md:pt-12`}>
+          <div>
+            <h1 className="font-[family-name:var(--font-display)] text-[42px] font-bold leading-[1.03] text-[#5C74E8] md:text-[56px]">
+              Comprender
+              <br />
+              para decidir
+              <br />
+              juntos.
+            </h1>
 
-              <p className="mt-6 max-w-[42rem] font-[family-name:var(--font-body)] text-[17px] font-semibold leading-[1.65] text-[color:var(--color-primary-dark)] md:text-[19px]">
-                Un espacio para entender la propuesta de reforma estatutaria del Acueducto
-                Comunitario Acuareforma, recorrer sus cambios y participar en una conversación
-                informada y respetuosa.
-              </p>
-
-              <div className="mt-8">
-                <Link href="/explorar" className={`${STYLES.buttonPrimary} gap-2`}>
-                  Explorar la propuesta
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-
-            <aside className="rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)]">
-              <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
-                La conversación
-                <br />
-                nos fortalece
-              </h2>
-
-              <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-7 text-[color:var(--color-text)]">
-                Cada aporte cuenta. Este es un espacio para escuchar, preguntar, opinar y
-                construir acuerdos pensando en el bienestar de toda la comunidad.
-              </p>
-            </aside>
+            <p className="mt-5 max-w-[42rem] font-[family-name:var(--font-body)] text-[17px] font-semibold leading-[1.42] text-[color:var(--color-primary-dark)] md:text-[19px] md:leading-[1.48]">
+              Un espacio para entender la propuesta de reforma estatutaria del Acueducto
+              Comunitario Acuareforma, recorrer sus cambios y participar en una conversación
+              informada y respetuosa.
+            </p>
           </div>
+
+          <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-3">
+            {primaryNavigationCards.map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                className={`group flex h-full min-h-[200px] flex-col rounded-2xl border p-5 transition-colors duration-150 md:min-h-[230px] ${card.colorClasses}`}
+              >
+                <div className={`font-[family-name:var(--font-display)] text-[46px] font-extrabold leading-none ${card.numberClasses}`}>
+                  {card.number}
+                </div>
+
+                <h3
+                  style={{ color: card.titleColor }}
+                  className={`mt-2 font-[family-name:var(--font-display)] text-[25px] font-bold leading-tight ${card.titleClasses}`}
+                >
+                  {card.title}
+                </h3>
+
+                <p className={`mt-3 text-[15px] font-medium leading-6 ${card.descriptionClasses}`}>
+                  {card.description}
+                </p>
+
+                <div className={`mt-auto pt-6 font-[family-name:var(--font-display)] text-[15px] font-semibold ${card.actionClasses}`}>
+                  Ir ahora <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <aside className="mt-8 rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)] md:mt-10">
+            <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
+              La conversación
+              <br />
+              nos fortalece
+            </h2>
+
+            <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-7 text-[color:var(--color-text)]">
+              Cada aporte cuenta. Este es un espacio para escuchar, preguntar, opinar y
+              construir acuerdos pensando en el bienestar de toda la comunidad.
+            </p>
+          </aside>
         </div>
       </section>
 
-      <section className="bg-[color:var(--color-background)]">
+      <section id="participacion-cifras" className="bg-[color:var(--color-background)]">
         <div className={`${STYLES.container} py-14 md:py-16`}>
           <h2 className={STYLES.h2}>La participación en cifras</h2>
 
@@ -172,12 +237,12 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-primary-dark)]">
+            <div className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-progress)]">
               <div className="flex items-center gap-2 text-[color:var(--color-primary-dark)]">
                 <FileText size={18} />
                 <div className={STYLES.cardLabel}>Artículos comentados</div>
               </div>
-              <div className="mt-3 font-[family-name:var(--font-display)] text-5xl font-bold text-[#C8B100]">
+              <div className="mt-3 font-[family-name:var(--font-display)] text-5xl font-bold text-[color:var(--color-progress)]">
                 {uniqueArticles.size}
               </div>
             </div>
