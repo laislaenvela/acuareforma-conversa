@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Contribution } from "./lib/types";
 import { getArticles, getAllContributions } from "./lib/data";
 import type { Article } from "./lib/types";
@@ -152,20 +153,33 @@ export default function Home() {
     <main className={STYLES.page}>
       <section className="bg-[color:var(--color-surface)]">
         <div className={`${STYLES.container} pb-10 pt-10 md:pb-14 md:pt-12`}>
-          <div>
-            <h1 className="font-[family-name:var(--font-display)] text-[42px] font-bold leading-[1.03] text-[#5C74E8] md:text-[56px]">
-              Comprender
-              <br />
-              para decidir
-              <br />
-              juntos.
-            </h1>
+          <div className="grid grid-cols-[minmax(0,1fr)_140px] items-center gap-4 sm:grid-cols-[minmax(0,1fr)_170px] md:grid-cols-2 md:gap-10">
+            <div className="contents md:block">
+              <h1 className="order-1 font-[family-name:var(--font-display)] text-[36px] font-bold leading-[1.03] text-[#5C74E8] sm:text-[40px] md:text-[56px]">
+                Comprender
+                <br />
+                para decidir
+                <br />
+                juntos.
+              </h1>
 
-            <p className="mt-5 max-w-[42rem] font-[family-name:var(--font-body)] text-[17px] font-semibold leading-[1.42] text-[color:var(--color-primary-dark)] md:text-[19px] md:leading-[1.48]">
-              Un espacio para entender la propuesta de reforma estatutaria del Acueducto
-              Comunitario Acuareforma, recorrer sus cambios y participar en una conversación
-              informada y respetuosa.
-            </p>
+              <p className="order-3 col-span-2 mt-4 max-w-[42rem] font-[family-name:var(--font-body)] text-[15px] font-semibold leading-[1.42] text-[color:var(--color-primary-dark)] sm:text-[16px] md:mt-5 md:text-[19px] md:leading-[1.48]">
+                Un espacio para entender la propuesta de reforma estatutaria del Acueducto
+                Comunitario Acuareforma, recorrer sus cambios y participar en una conversación
+                informada y respetuosa.
+              </p>
+            </div>
+
+            <div className="order-2 relative h-[200px] overflow-hidden rounded-2xl bg-[color:var(--color-surface)] sm:h-[220px] md:h-[320px]">
+              <Image
+                src="/graficos/gota.svg"
+                alt="Ilustracion de gota"
+                fill
+                priority
+                className="object-contain object-center"
+                sizes="(min-width: 768px) 40vw, 100vw"
+              />
+            </div>
           </div>
 
           <div className="mt-8 grid gap-4 md:mt-10 md:grid-cols-3">
