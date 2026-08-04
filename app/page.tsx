@@ -164,9 +164,9 @@ export default function Home() {
               </h1>
 
               <p className="order-3 col-span-2 mt-4 max-w-[42rem] font-[family-name:var(--font-body)] text-[15px] font-semibold leading-[1.42] text-[color:var(--color-primary-dark)] sm:text-[16px] md:mt-5 md:text-[19px] md:leading-[1.48]">
-                Un espacio para entender la propuesta de reforma estatutaria del Acueducto
-                Comunitario Acuareforma, recorrer sus cambios y participar en una conversación
-                informada y respetuosa.
+                Acuareforma Conversa es un espacio para comprender la propuesta de reforma estatutaria del acueducto
+                comunitario Acuareforma, explorar los cambios que propone, compartir preguntas y aportes,
+                y prepararnos para participar de manera informada en la Asamblea General.
               </p>
             </div>
 
@@ -211,18 +211,6 @@ export default function Home() {
             ))}
           </div>
 
-          <aside className="mt-8 rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)] md:mt-10">
-            <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
-              La conversación
-              <br />
-              nos fortalece
-            </h2>
-
-            <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-7 text-[color:var(--color-text)]">
-              Cada aporte cuenta. Este es un espacio para escuchar, preguntar, opinar y
-              construir acuerdos pensando en el bienestar de toda la comunidad.
-            </p>
-          </aside>
         </div>
       </section>
 

@@ -138,14 +138,28 @@ export default function ParticipacionPage() {
     <main className={STYLES.page}>
       <section className="mx-auto w-full max-w-3xl px-6 py-12 md:px-8 md:py-16">
       <h1 className={STYLES.h1}>
-        La conversación de la comunidad
+        Mi participación
       </h1>
 
       <p className={`${STYLES.subtitle} mt-4 max-w-2xl`}>
-        Aquí puedes ver cómo avanza la conversación sobre la propuesta y reconocer en qué
+        Aquí puedes ver cómo avanza tu participación sobre la propuesta y reconocer en qué
         artículos ya participaste. Este espacio te ayuda a organizar tus aportes para
         seguir dialogando con una comprensión más completa de la reforma.
       </p>
+
+      <aside className="mt-8 rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)] md:mt-10">
+        <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
+          La conversación
+          <br />
+          nos fortalece
+        </h2>
+
+        <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-7 text-[color:var(--color-text)]">
+          Cada aporte cuenta. Este es un espacio para escuchar, preguntar, opinar y
+          construir acuerdos pensando en el bienestar de toda la comunidad.
+        </p>
+      </aside>
+      
 
       {!participant ? (
         <>
