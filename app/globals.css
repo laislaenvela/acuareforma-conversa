@@ -3,6 +3,7 @@
 :root {
   /* Marca / texto */
   --color-primary: #4a6cf0;        /* navy: logo, títulos, texto de marca */
+  --color-primary-rgb: 74 108 240;
   --color-primary-dark: #12203f;   /* navy oscuro: hover / énfasis */
 
   /* Tarjetas de pasos (1-2-3) */

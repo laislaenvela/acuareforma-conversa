@@ -8,14 +8,16 @@ import type {
   AporteDB,
 } from "./types";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase environment variables");
+export function isSupabaseConfigured(): boolean {
+  return Boolean(supabaseUrl && supabaseAnonKey);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = isSupabaseConfigured()
+  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  : null;
 
 function normalizeTipo(value: string): string {
   const map: Record<string, string> = {
@@ -73,6 +75,10 @@ function logSupabaseError(context: string, error: {
  * Obtiene todos los artículos ordenados por ID
  */
 export async function fetchArticulos(): Promise<ArticuloDB[]> {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("articulos")
     .select("*")
@@ -90,6 +96,10 @@ export async function fetchArticulos(): Promise<ArticuloDB[]> {
  * Obtiene un artículo específico por ID
  */
 export async function fetchArticuloById(id: number): Promise<ArticuloDB | null> {
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("articulos")
     .select("*")
@@ -110,6 +120,10 @@ export async function fetchArticuloById(id: number): Promise<ArticuloDB | null> 
 export async function fetchArticulosByCapitulo(
   capituloId: number
 ): Promise<ArticuloDB[]> {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("articulos")
     .select("*")
@@ -135,6 +149,10 @@ export async function fetchArticulosByCapitulo(
  * Obtiene todos los capítulos ordenados por orden
  */
 export async function fetchCapitulos(): Promise<CapituloDB[]> {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("capitulos")
     .select("*")
@@ -152,6 +170,10 @@ export async function fetchCapitulos(): Promise<CapituloDB[]> {
  * Obtiene un capítulo específico por ID
  */
 export async function fetchCapituloById(id: number): Promise<CapituloDB | null> {
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("capitulos")
     .select("*")
@@ -174,6 +196,10 @@ export async function fetchCapituloById(id: number): Promise<CapituloDB | null> 
  * Obtiene todos los temas
  */
 export async function fetchTemas(): Promise<TemaDB[]> {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("temas")
     .select("*")
@@ -191,6 +217,10 @@ export async function fetchTemas(): Promise<TemaDB[]> {
  * Obtiene relación artículo-tema
  */
 export async function fetchArticulosTemas(): Promise<ArticuloTemaDB[]> {
+  if (!supabase) {
+    return [];
+  }
+
   const { data, error } = await supabase
     .from("articulos_temas")
     .select("articulo_id, tema_id");
@@ -210,6 +240,10 @@ export async function fetchArticulosTemas(): Promise<ArticuloTemaDB[]> {
 export async function fetchParticipanteByCorreo(
   correo: string
 ): Promise<ParticipanteDB | null> {
+  if (!supabase) {
+    return null;
+  }
+
   const { data, error } = await supabase
     .from("participantes")
     .select("*")
@@ -227,6 +261,10 @@ export async function fetchParticipanteByCorreo(
 export async function createParticipante(
   participante: Omit<ParticipanteDB, "id" | "created_at" | "updated_at">
 ): Promise<ParticipanteDB> {
+  if (!supabase) {
+    throw new Error("Supabase no está configurado");
+  }
+
   const { data, error } = await supabase
     .from("participantes")
     .insert(participante)
@@ -293,7 +331,9 @@ export async function createAporte(
 
 export async function fetchAportesByArticulo(
   articuloId: number
-): Promise<AporteDB[]> {
+): Promise<AporteDB[]> {  if (!supabase) {
+    return [];
+  }
   const { data, error } = await supabase
     .from("aportes")
     .select("*")

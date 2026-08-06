@@ -1,5 +1,6 @@
 import {
   supabase,
+  isSupabaseConfigured,
   fetchArticulos,
   fetchArticuloById,
   fetchArticulosByCapitulo,
@@ -12,6 +13,8 @@ import {
   createAporte,
   fetchAportesByArticulo,
 } from "./supabase";
+
+import { articles as mockArticles, chapters as mockChapters, themes as mockThemes } from "../data/proposal.mock";
 
 import type {
   Article,
@@ -175,6 +178,20 @@ function denormalizeAportePosicion(value: string): string {
 
 
 export async function getArticles(): Promise<Article[]> {
+  if (!isSupabaseConfigured()) {
+    return mockArticles.map((article) => ({
+      id: article.id,
+      title: article.title,
+      chapterId: article.chapterId,
+      numero: article.numero,
+      currentText: article.currentText,
+      proposedText: article.proposedText,
+      rationale: article.rationale,
+      communityQuestion: article.communityQuestion,
+      status: article.status,
+    }));
+  }
+
   const dbArticulos = await fetchArticulos();
   return dbArticulos.map(transformArticulo);
 }
@@ -182,6 +199,26 @@ export async function getArticles(): Promise<Article[]> {
 export async function getArticleById(
   id: number
 ): Promise<Article | null> {
+  if (!isSupabaseConfigured()) {
+    const mockArticle = mockArticles.find((article) => article.id === id);
+
+    if (!mockArticle) {
+      return null;
+    }
+
+    return {
+      id: mockArticle.id,
+      title: mockArticle.title,
+      chapterId: mockArticle.chapterId,
+      numero: mockArticle.numero,
+      currentText: mockArticle.currentText,
+      proposedText: mockArticle.proposedText,
+      rationale: mockArticle.rationale,
+      communityQuestion: mockArticle.communityQuestion,
+      status: mockArticle.status,
+    };
+  }
+
   const dbArticulo = await fetchArticuloById(id);
 
   if (!dbArticulo) {
@@ -194,6 +231,22 @@ export async function getArticleById(
 export async function getArticlesByChapter(
   chapterId: number
 ): Promise<Article[]> {
+  if (!isSupabaseConfigured()) {
+    return mockArticles
+      .filter((article) => article.chapterId === chapterId)
+      .map((article) => ({
+        id: article.id,
+        title: article.title,
+        chapterId: article.chapterId,
+        numero: article.numero,
+        currentText: article.currentText,
+        proposedText: article.proposedText,
+        rationale: article.rationale,
+        communityQuestion: article.communityQuestion,
+        status: article.status,
+      }));
+  }
+
   const dbArticulos = await fetchArticulosByCapitulo(chapterId);
 
   return dbArticulos.map(transformArticulo);
@@ -204,6 +257,22 @@ export async function getArticlesByChapter(
 // ============================================================
 
 export async function getChapters(): Promise<Chapter[]> {
+  if (!isSupabaseConfigured()) {
+    return mockChapters.map((chapter) => ({
+      id: chapter.id,
+      codigo: chapter.codigo,
+      orden: chapter.orden,
+      nombre_vigente: chapter.nombre_vigente,
+      nombre_propuesto: chapter.nombre_propuesto,
+      slug: chapter.slug,
+      number: chapter.number,
+      title: chapter.title,
+      previousTitle: chapter.previousTitle,
+      summary: chapter.summary,
+      articles: chapter.articles ?? [],
+    }));
+  }
+
   const [dbCapitulos, dbArticulos] = await Promise.all([
     fetchCapitulos(),
     fetchArticulos(),
@@ -228,6 +297,28 @@ export async function getChapters(): Promise<Chapter[]> {
 export async function getChapterById(
   id: number
 ): Promise<Chapter | null> {
+  if (!isSupabaseConfigured()) {
+    const mockChapter = mockChapters.find((chapter) => chapter.id === id);
+
+    if (!mockChapter) {
+      return null;
+    }
+
+    return {
+      id: mockChapter.id,
+      codigo: mockChapter.codigo,
+      orden: mockChapter.orden,
+      nombre_vigente: mockChapter.nombre_vigente,
+      nombre_propuesto: mockChapter.nombre_propuesto,
+      slug: mockChapter.slug,
+      number: mockChapter.number,
+      title: mockChapter.title,
+      previousTitle: mockChapter.previousTitle,
+      summary: mockChapter.summary,
+      articles: mockChapter.articles ?? [],
+    };
+  }
+
   const dbCapitulo = await fetchCapituloById(id);
 
   if (!dbCapitulo) {
@@ -251,6 +342,15 @@ export async function getChapterById(
 // ============================================================
 
 export async function getThemes(): Promise<Theme[]> {
+  if (!isSupabaseConfigured()) {
+    return mockThemes.map((theme) => ({
+      id: theme.id,
+      title: theme.title,
+      slug: theme.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      articles: theme.articles,
+    }));
+  }
+
   const [dbTemas, dbArticulosTemas] = await Promise.all([
     fetchTemas(),
     fetchArticulosTemas(),
@@ -421,6 +521,10 @@ export async function getParticipantContributionsByEmail(
 }
 
 export async function getAllContributions(): Promise<Contribution[]> {
+  if (!isSupabaseConfigured()) {
+    return [];
+  }
+
   const { data: dbAportes, error } = await supabase
     .from("aportes")
     .select("*")

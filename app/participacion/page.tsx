@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import type { Participant, Contribution, Article } from "../lib/types";
@@ -136,29 +137,44 @@ export default function ParticipacionPage() {
 
   return (
     <main className={STYLES.page}>
-      <section className="mx-auto w-full max-w-3xl px-6 py-12 md:px-8 md:py-16">
-      <h1 className={STYLES.h1}>
-        Mi participación
-      </h1>
+      <section className="bg-[color:var(--color-surface)]">
+        <div className={`${STYLES.container} pb-10 pt-10 md:pb-14 md:pt-12`}>
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,18rem)] md:items-center md:gap-10">
+            <div className="min-w-0 md:block">
+              <div className="flex items-start gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <h1 className="max-w-[10ch] flex-1 font-[family-name:var(--font-display)] text-[36px] font-bold leading-[1.03] text-[#5C74E8] sm:max-w-none sm:text-[40px] md:text-[56px]">
+                Mi participación
+                </h1>
 
-      <p className={`${STYLES.subtitle} mt-4 max-w-2xl`}>
-        Aquí puedes ver cómo avanza tu participación sobre la propuesta y reconocer en qué
-        artículos ya participaste. Este espacio te ayuda a organizar tus aportes para
-        seguir dialogando con una comprensión más completa de la reforma.
-      </p>
+                <div className="relative flex w-full max-w-[13rem] shrink-0 rotate-[-2deg] items-center justify-center overflow-hidden border border-[#E8C95E] bg-[#FFF7A8] p-4 shadow-[4px_4px_12px_rgba(var(--color-primary-rgb),0.35)] sm:max-w-[14rem] md:h-[220px] md:w-[15rem] md:max-w-none md:order-2">
+                  <div className="absolute right-0 top-0 h-0 w-0 border-b-[24px] border-l-[24px] border-b-transparent border-l-[#E8C95E]" />
+                  <div className="absolute left-3 top-3 h-4 w-4 rounded-full border border-[#D8B94A] bg-[#FFF7A8]" />
+                  <div className="absolute bottom-3 right-3 h-5 w-5 rotate-12 rounded-full border border-[#D8B94A] bg-[#FFF7A8]" />
+                  <p className="font-[family-name:var(--font-body)] text-[13px] font-semibold leading-5 text-[#5A4010] sm:text-[14px] md:text-[16px]">
+                    “La conversación nos fortalece. Cada aporte cuenta y nos ayuda a construir acuerdos para toda la comunidad.”
+                  </p>
+                </div>
+              </div>
 
-      <aside className="mt-8 rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)] md:mt-10">
-        <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
-          La conversación
-          <br />
-          nos fortalece
-        </h2>
+              <p className="mt-4 max-w-[42rem] font-[family-name:var(--font-body)] text-[15px] font-semibold leading-[1.42] text-[color:var(--color-primary-dark)] sm:text-[16px] md:mt-5 md:text-[19px] md:leading-[1.48]">
+                Aquí puedes ver cómo avanza tu participación sobre la propuesta y reconocer en qué artículos ya participaste. Este espacio te ayuda a organizar tus aportes para seguir dialogando con una comprensión más completa de la reforma.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <p className="mt-4 font-[family-name:var(--font-body)] text-[16px] leading-7 text-[color:var(--color-text)]">
-          Cada aporte cuenta. Este es un espacio para escuchar, preguntar, opinar y
-          construir acuerdos pensando en el bienestar de toda la comunidad.
-        </p>
-      </aside>
+
+
+
+
+
+
+
+
+
+      <section className="mx-auto w-full max-w-3xl px-6 py-10 md:px-8 md:py-12">
+     
       
 
       {!participant ? (
@@ -337,7 +353,7 @@ export default function ParticipacionPage() {
           <Link
             key={article.id}
             href={`/articulo/${article.id}`}
-            className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-proposal)]`}
+            className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-proposal)] shadow-[6px_6px_0_var(--color-primary)]`}
           >
             <div className="text-sm text-[color:var(--color-text-secondary)]">
               Artículo {article.numero}

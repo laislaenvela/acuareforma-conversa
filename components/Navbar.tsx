@@ -26,18 +26,18 @@ export default function Navbar() {
 
         <div className="flex items-center justify-between">
 
-          <Link
-  href="/"
-  className="leading-none text-[color:var(--color-primary)]"
->
-  <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
-    Acuareforma
-  </div>
+          <Link href="/" className="flex items-center gap-4 leading-none text-[color:var(--color-primary)]">
+            <img src="/graficos/acualogo.svg" alt="Acuareforma" className="h-14 w-14 object-contain" />
 
-  <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
-    conversa
-  </div>
-</Link>
+            <div>
+              <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
+                Acuareforma
+              </div>
+              <div className="font-[family-name:var(--font-display)] text-[29px] font-extrabold tracking-[-0.02em]">
+                conversa
+              </div>
+            </div>
+          </Link>
 
           <button
             onClick={toggleMenu}
