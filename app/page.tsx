@@ -89,6 +89,54 @@ export default function Home() {
     [contributions]
   );
 
+  const communityPositionSummary = useMemo(() => {
+    const totalContributions = contributions.length;
+
+    if (totalContributions === 0) {
+      return "La conversación aún no ha comenzado. Este será el espacio para seguir colectivamente el avance del proceso.";
+    }
+
+    if (totalContributions <= 12) {
+      return "La conversación está comenzando. Cada nuevo aporte ayuda a enriquecer la comprensión colectiva de la propuesta.";
+    }
+
+    const positions = [
+      { label: "De acuerdo", count: agreedCount },
+      { label: "Parcialmente de acuerdo", count: partiallyAgreedCount },
+      { label: "En desacuerdo", count: disagreedCount },
+      { label: "Necesita más información", count: needInfoCount },
+    ].sort((a, b) => b.count - a.count);
+
+    if (totalContributions <= 24) {
+      return "La comunidad ya ha comenzado a construir una conversación alrededor de la propuesta. A medida que lleguen nuevos aportes, este resumen mostrará cómo avanza el proceso.";
+    }
+
+    const topPosition = positions[0];
+    const secondPosition = positions[1];
+    const hasClearPredominance = topPosition.count >= secondPosition.count + 3;
+
+    if (!hasClearPredominance) {
+      return "Los aportes registrados muestran una diversidad de posturas frente a la propuesta. Esta variedad de perspectivas hace parte del proceso de construcción colectiva.";
+    }
+
+    switch (topPosition.label) {
+      case "De acuerdo":
+        return "Hasta ahora, la mayor parte de los aportes expresan acuerdo con la propuesta. También existen aportes con otras posturas, lo que refleja que la conversación incorpora diferentes perspectivas de la comunidad.";
+      case "Parcialmente de acuerdo":
+        return "Hasta ahora, la mayor parte de los aportes expresan una postura de acuerdo parcial con la propuesta. También existen aportes con otras posturas, lo que refleja que la conversación incorpora diferentes perspectivas de la comunidad.";
+      case "En desacuerdo":
+        return "Hasta ahora, la mayor parte de los aportes expresan desacuerdo con la propuesta. También existen aportes con otras posturas, lo que refleja que la conversación incorpora diferentes perspectivas de la comunidad.";
+      default:
+        return "Hasta ahora, la mayor parte de los aportes expresan que se necesita más información sobre la propuesta. También existen aportes con otras posturas, lo que refleja que la conversación incorpora diferentes perspectivas de la comunidad.";
+    }
+  }, [
+    contributions.length,
+    agreedCount,
+    partiallyAgreedCount,
+    disagreedCount,
+    needInfoCount,
+  ]);
+
   const articleRanking = useMemo(() =>
     getArticleRanking(contributions),
     [contributions]
@@ -216,19 +264,9 @@ export default function Home() {
 
       <section id="participacion-cifras" className="bg-[color:var(--color-background)]">
         <div className={`${STYLES.container} py-14 md:py-16`}>
-          <h2 className={STYLES.h2}>La participación en cifras</h2>
+          <h2 className={STYLES.h2}>Así va el proceso</h2>
 
           <div className="mt-8 grid gap-5 md:grid-cols-3">
-            <div className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-primary)]">
-              <div className="flex items-center gap-2 text-[color:var(--color-primary-dark)]">
-                <MessageCircle size={18} />
-                <div className={STYLES.cardLabel}>Aportes registrados</div>
-              </div>
-              <div className="mt-3 font-[family-name:var(--font-display)] text-5xl font-bold text-[color:var(--color-primary)]">
-                {contributions.length}
-              </div>
-            </div>
-
             <div className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-community)]">
               <div className="flex items-center gap-2 text-[color:var(--color-primary-dark)]">
                 <Users size={18} />
@@ -236,6 +274,16 @@ export default function Home() {
               </div>
               <div className="mt-3 font-[family-name:var(--font-display)] text-5xl font-bold text-[color:var(--color-community)]">
                 {uniqueUsers.size}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-6 shadow-[6px_6px_0_var(--color-primary)]">
+              <div className="flex items-center gap-2 text-[color:var(--color-primary-dark)]">
+                <MessageCircle size={18} />
+                <div className={STYLES.cardLabel}>Aportes registrados</div>
+              </div>
+              <div className="mt-3 font-[family-name:var(--font-display)] text-5xl font-bold text-[color:var(--color-primary)]">
+                {contributions.length}
               </div>
             </div>
 
@@ -249,6 +297,14 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <p className={`${STYLES.subtitle} mx-auto mt-10 mb-12 max-w-3xl font-medium leading-8`}>
+            Hasta ahora, <span className="font-[family-name:var(--font-display)] font-semibold text-[color:var(--color-primary-dark)]">{uniqueUsers.size}</span> personas han compartido <span className="font-[family-name:var(--font-display)] font-semibold text-[color:var(--color-primary-dark)]">{contributions.length}</span> aportes sobre <span className="font-[family-name:var(--font-display)] font-semibold text-[color:var(--color-primary-dark)]">{uniqueArticles.size}</span> artículos de la propuesta de reforma.
+          </p>
+
+          <h3 className={`${STYLES.h3} mt-10`}>
+            ¿Cómo se está posicionando la comunidad?
+          </h3>
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
             <div className="rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-4 text-center">
@@ -268,6 +324,10 @@ export default function Home() {
               <div className="mt-2 font-[family-name:var(--font-display)] text-3xl font-bold text-[color:var(--color-primary-dark)]">{needInfoCount}</div>
             </div>
           </div>
+
+          <p className={`${STYLES.subtitle} mx-auto mt-10 mb-4 max-w-3xl font-medium leading-8`}>
+            {communityPositionSummary}
+          </p>
         </div>
       </section>
 

@@ -147,6 +147,7 @@ export default function ParticipacionPage() {
         seguir dialogando con una comprensión más completa de la reforma.
       </p>
 
+
       <aside className="mt-8 rounded-2xl border border-[color:var(--color-sand-deep)] bg-[color:var(--color-sand)] p-6 shadow-[6px_6px_0_var(--color-sand-deep)] md:mt-10">
         <h2 className="font-[family-name:var(--font-display)] text-[28px] font-bold leading-tight text-[color:var(--color-primary-dark)] md:text-[32px]">
           La conversación
@@ -163,7 +164,11 @@ export default function ParticipacionPage() {
 
       {!participant ? (
         <>
-        <div className="mt-8 flex flex-col gap-4 rounded-2xl bg-[color:var(--color-surface-primary)] p-6 md:p-8">
+        <p className={`${STYLES.subtitle} mt-8 max-w-2xl`}>
+          Recuerda utilizar siempre los mismos datos de registro para que todos tus aportes queden asociados a la misma participación durante este proceso.
+        </p>
+
+        <div className="mt-4 flex flex-col gap-4 rounded-2xl bg-[color:var(--color-surface-primary)] p-6 md:p-8">
 
           <input
             type="text"
