@@ -48,8 +48,20 @@ export default function RootLayout({
         dialogar con respeto y construir decisiones informadas.
       </div>
 
-      <div className="self-end text-left font-[family-name:var(--font-body)] text-sm text-[color:var(--color-primary-dark)] md:text-right">
-        © 2026 Acueducto Comunitario Acuareforma
+      <div className="self-end flex w-full flex-col items-end font-[family-name:var(--font-body)] text-sm text-right text-[color:var(--color-primary-dark)]">
+        <div className="mb-1 w-full text-right">Desarrollado por</div>
+        <a
+          href="https://laislaenvela.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-[color:var(--color-link)] transition-colors duration-150 hover:text-[color:var(--color-link-hover)]"
+        >
+          <img
+            src="/graficos/la-isla-en-vela-logo.png"
+            alt="Logo de La Isla en Vela"
+            className="h-[100px] w-auto"
+          />
+        </a>
       </div>
     </div>
   </footer>
