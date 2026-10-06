@@ -24,7 +24,7 @@ export const STYLES = {
   cardBody:
     "mt-4 font-[family-name:var(--font-body)] text-[17px] leading-[1.7] text-[color:var(--color-text)]",
   buttonPrimary:
-    "inline-flex items-center justify-center rounded-xl bg-[color:var(--color-primary)] px-6 py-3 font-[family-name:var(--font-display)] text-[16px] font-semibold text-white shadow-[4px_4px_0_var(--color-primary)] transition-colors duration-150 hover:bg-[color:var(--color-primary-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center rounded-xl bg-[color:var(--color-step-blue-dark)] px-6 py-3 font-[family-name:var(--font-display)] text-[16px] font-semibold text-white shadow-[4px_4px_0_var(--color-text-primary)] transition-colors duration-150 hover:bg-[color:var(--color-primary)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2",
   buttonSecondary:
     "inline-flex items-center justify-center rounded-xl border border-[color:var(--color-border)] bg-[color:var(--color-surface)] px-6 py-3 font-[family-name:var(--font-display)] text-[16px] font-semibold text-[color:var(--color-primary-dark)] transition-colors duration-150 hover:border-[color:var(--color-primary)] hover:text-[color:var(--color-primary-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2",
   input:

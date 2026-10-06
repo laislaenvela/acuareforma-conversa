@@ -27,6 +27,8 @@
   --color-text-muted: #6b7280;
   --color-text-inverse: #ffffff;
   --color-progress: #f9b043;
+  --color-brand-primary: #7fa1ff;
+  --color-text-primary: #0f1b5b;
 }
 
 @theme inline {

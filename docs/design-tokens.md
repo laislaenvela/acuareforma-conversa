@@ -12,7 +12,7 @@ Los componentes no deben utilizar códigos HEX directamente cuando exista un Des
 
 | Categoría | Design Token | Valor | Uso |
 |-----------|--------------|--------|-----|
-| **Brand** | `--color-brand-primary` | `#7FA1FF` | Identidad institucional, Hero y elementos de marca. |
+| **Brand** |  `--color-brand-primary` | `#7FA1FF`| Identidad institucional, Hero y elementos de marca. |
 | **Proposal** | `--color-proposal` | `#5D74E8` | Exploración de la propuesta, botones principales y estados activos relacionados con la lectura. |
 | **Participation** | `--color-participation` | `#CFE046` | Participación individual, formularios, aportes y acciones del usuario. |
 | **Community** | `--color-community` | `#F27340` | Indicadores colectivos, estadísticas y participación comunitaria. |
