@@ -269,8 +269,7 @@ Creemos que una tarea así no puede recaer en unas pocas personas. Necesitamos m
               ¿Cómo se materializan estas iniciativas?
             </h2>
             <p className={lead}>
-              Las propuestas de <strong>Comunidad, ¡abraza tu acueducto! y La Ruta</strong> han sido impulsadas por vecinas de la vereda que hacemos parte de <strong>La Isla en Vela</strong>.
-Desde ahí hemos dispuesto, de manera voluntaria, conocimientos, herramientas y capacidades de la organización para contribuir a que estas iniciativas puedan hacerse realidad.
+              La Isla en Vela ha dispuesto, de manera voluntaria, conocimientos, herramientas y capacidades de la organización para contribuir a que estas iniciativas puedan hacerse realidad junto a otros vecinos y vecinas de la comunidad.
 Diseño, pedagogía, comunicación, tecnología, organización y sistematización se han ido poniendo al servicio de una pregunta que compartimos con muchas otras personas de la comunidad:
 
             </p>
