@@ -1,19 +1,19 @@
-type SegmentedOption = {
-  value: string;
+type SegmentedOption<Value extends string> = {
+  value: Value;
   label: string;
 };
 
-type SegmentedControlProps = {
-  value: string;
-  options: readonly SegmentedOption[];
-  onChange: (value: string) => void;
+type SegmentedControlProps<Value extends string> = {
+  value: Value;
+  options: readonly SegmentedOption<Value>[];
+  onChange: (value: Value) => void;
   segmentedClassName: string;
   segmentClassName: string;
   activeClassName: string;
   inactiveClassName: string;
 };
 
-export default function SegmentedControl({
+export default function SegmentedControl<Value extends string>({
   value,
   options,
   onChange,
@@ -21,7 +21,7 @@ export default function SegmentedControl({
   segmentClassName,
   activeClassName,
   inactiveClassName,
-}: SegmentedControlProps) {
+}: SegmentedControlProps<Value>) {
   const activeIndex = Math.max(
     0,
     options.findIndex((option) => option.value === value)
