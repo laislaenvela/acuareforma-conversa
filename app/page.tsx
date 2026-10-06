@@ -152,6 +152,11 @@ export default function Home() {
     [articles]
   );
 
+  const articleSlugById = useMemo(
+    () => new Map(articles.map((article) => [article.id, article.slug])),
+    [articles]
+  );
+
   const primaryNavigationCards = [
     {
       number: "1",
@@ -342,7 +347,7 @@ export default function Home() {
               {articleRanking.slice(0, 5).map((article, index) => (
                 <Link
                   key={`${article.articleId}-${index}`}
-                  href={`/articulo/${article.articleId}`}
+                  href={articleSlugById.has(article.articleId) ? `/articulo/${articleSlugById.get(article.articleId)}` : "#"}
                   className={`flex items-center justify-between gap-4 px-5 py-5 transition-colors duration-150 hover:bg-[color:var(--color-background)] ${index < 4 ? "border-b border-[color:var(--color-border)]" : ""}`}
                 >
                   <div className="flex items-center gap-4">

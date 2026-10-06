@@ -32,6 +32,29 @@ export default function ExplorarPage() {
     [articles]
   );
 
+  const articleSlugById = useMemo(
+    () => new Map(articles.map((article) => [article.id, article.slug])),
+    [articles]
+  );
+
+  const articleRangesByChapter = useMemo(() => {
+    const ranges = new Map<number, { first: string; last: string }>();
+
+    articles.forEach((article) => {
+      const range = ranges.get(article.chapterId);
+      if (range) {
+        range.last = article.numero;
+      } else {
+        ranges.set(article.chapterId, {
+          first: article.numero,
+          last: article.numero,
+        });
+      }
+    });
+
+    return ranges;
+  }, [articles]);
+
   const normalizedQuery = useMemo(
     () => searchQuery.trim().toLowerCase(),
     [searchQuery]
@@ -54,7 +77,10 @@ export default function ExplorarPage() {
         .toLowerCase();
 
       const chapterArticles = (chapter.articles ?? [])
-        .map((article) => article.title)
+        .map((article) => {
+          const numero = articleNumeroById.get(article.id);
+          return `${numero ? `artículo ${numero}` : ""} ${article.title}`;
+        })
         .join(" ")
         .toLowerCase();
 
@@ -63,7 +89,7 @@ export default function ExplorarPage() {
         chapterArticles.includes(normalizedQuery)
       );
     });
-  }, [chapters, normalizedQuery]);
+  }, [chapters, normalizedQuery, articleNumeroById]);
 
   const filteredThemes = useMemo(() => {
     if (!normalizedQuery) {
@@ -166,7 +192,7 @@ export default function ExplorarPage() {
         filteredChapters.map((chapter) => (
     <details
       key={chapter.id}
-      className={STYLES.card}
+      className={`${STYLES.card} shadow-[6px_6px_0_rgba(93,116,232,0.22)]!`}
     >
       <summary className="cursor-pointer">
   <div className={STYLES.cardLabel}>
@@ -176,6 +202,12 @@ export default function ExplorarPage() {
   <div className={STYLES.cardTitle}>
     {chapter.title}
   </div>
+  {chapter.title !== "Preámbulo" && articleRangesByChapter.has(chapter.id) && (
+    <p className="mt-1 text-sm text-[color:var(--color-text-secondary)]">
+      Artículos del {articleRangesByChapter.get(chapter.id)?.first} al{" "}
+      {articleRangesByChapter.get(chapter.id)?.last}
+    </p>
+  )}
 </summary>
 <div className="mt-4">
   {chapter.previousTitle && (
@@ -197,7 +229,7 @@ export default function ExplorarPage() {
     {(chapter.articles ?? []).map((article) => (
       <Link
         key={article.id}
-        href={`/articulo/${article.id}`}
+        href={`/articulo/${article.slug}`}
         className="rounded-lg border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] p-3 transition-colors duration-150 hover:border-[color:var(--color-proposal)]"
       >
         <div className="text-sm text-[color:var(--color-text-secondary)]">
@@ -226,7 +258,7 @@ export default function ExplorarPage() {
           filteredThemes.map((theme) => (
             <details
               key={theme.id}
-              className={STYLES.card}
+              className={`${STYLES.card} shadow-[6px_6px_0_rgba(93,116,232,0.22)]!`}
             >
               <summary className="cursor-pointer">
                 <div className={STYLES.cardTitle}>
@@ -248,7 +280,7 @@ export default function ExplorarPage() {
                 {theme.articles.map((articleId) => (
                   <Link
                     key={`${theme.id}-${articleId}`}
-                    href={`/articulo/${articleId}`}
+                    href={articleSlugById.has(articleId) ? `/articulo/${articleSlugById.get(articleId)}` : "#"}
                     className="rounded-lg border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] p-3 transition-colors duration-150 hover:border-[color:var(--color-proposal)]"
                   >
                     <div className="text-sm text-[color:var(--color-text-secondary)]">

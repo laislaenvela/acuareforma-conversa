@@ -1,4 +1,4 @@
-# Setup del Proyecto - Acuareforma Conversa
+﻿# Setup del Proyecto - Acuareforma Conversa
 
 ## 📋 Requisitos Previos
 
@@ -45,7 +45,7 @@ acuareforma-conversa0/
 │   ├── layout.tsx               # Estructura HTML común
 │   ├── globals.css              # Estilos globales
 │   │
-│   ├── articulo/[id]/
+│   ├── articulo/[slug]/
 │   │   └── page.tsx             # Página individual de artículos
 │   │
 │   ├── explorar/

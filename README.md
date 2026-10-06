@@ -1,4 +1,4 @@
-# 🏛️ Acuareforma Conversa
+﻿# 🏛️ Acuareforma Conversa
 
 **Plataforma participativa para la reforma estatutaria del acueducto comunitario**
 
@@ -55,7 +55,7 @@ Para instrucciones detalladas, ver [SETUP.md](./SETUP.md)
 ```
 ├── app/
 │   ├── page.tsx              # Dashboard principal
-│   ├── articulo/[id]/        # Páginas de artículos individuales
+│   ├── articulo/[slug]/        # Páginas de artículos individuales
 │   ├── explorar/             # Explorador de propuesta
 │   ├── participacion/        # Registro y participación
 │   ├── lib/                  # Lógica compartida
@@ -87,7 +87,7 @@ Para instrucciones detalladas, ver [SETUP.md](./SETUP.md)
 |------|------------|
 | `/` | Dashboard con estadísticas y artículos trending |
 | `/explorar` | Explora todos los artículos por capítulos o temas |
-| `/articulo/[id]` | Detalle completo de un artículo + formulario para aportar |
+| `/articulo/[slug]` | Detalle completo de un artículo + formulario para aportar |
 | `/participacion` | Registro de usuario y estadísticas personales |
 | `/acerca` | Información sobre el proyecto |
 
@@ -108,7 +108,7 @@ Para instrucciones detalladas, ver [SETUP.md](./SETUP.md)
 4. Lee texto vigente vs. propuesto
 
 ### Aportación
-1. Lee un artículo en `/articulo/[id]`
+1. Lee un artículo en `/articulo/[slug]`
 2. Completa formulario:
    - Selecciona posición personal
    - Elige tipo de aporte

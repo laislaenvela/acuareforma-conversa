@@ -5,7 +5,9 @@ export type Article = {
   id: number;
   title: string;
   chapterId: number;
-  numero: number;
+  // Texto porque en Supabase incluye variantes alfanuméricas (ej. "16A")
+  numero: string;
+  slug: string;
   currentText: string;
   proposedText: string;
   rationale: string;
@@ -25,7 +27,7 @@ export type Chapter = {
   title: string; // nombre_propuesto
   summary?: string;
   previousTitle?: string;
-  articles?: { id: number; title: string }[];
+  articles?: { id: number; slug: string; title: string }[];
 };
 
 export type Theme = {
@@ -75,7 +77,9 @@ export type NewContributionRecord = Omit<
 export interface ArticuloDB {
   id: number;
   capitulo_id: number;
-  numero: number;
+  // Texto en Supabase: admite variantes alfanuméricas (ej. "16A")
+  numero: string;
+  slug: string;
   titulo: string;
   texto_vigente: string;
   texto_propuesto: string;

@@ -133,6 +133,11 @@ export default function ParticipacionPage() {
     [articles]
   );
 
+  const articleSlugById = useMemo(
+    () => new Map(articles.map((article) => [article.id, article.slug])),
+    [articles]
+  );
+
 
   return (
     <main className={STYLES.page}>
@@ -341,7 +346,7 @@ export default function ParticipacionPage() {
         {pendingArticleList.map((article) => (
           <Link
             key={article.id}
-            href={`/articulo/${article.id}`}
+            href={`/articulo/${article.slug}`}
             className={`${STYLES.card} block transition-colors duration-150 hover:border-[color:var(--color-proposal)]`}
           >
             <div className="text-sm text-[color:var(--color-text-secondary)]">
@@ -403,7 +408,7 @@ export default function ParticipacionPage() {
               {contribution.comment}
             </div>
             <Link
-  href={`/articulo/${contribution.articleId}`}
+  href={articleSlugById.has(contribution.articleId) ? `/articulo/${articleSlugById.get(contribution.articleId)}` : "#"}
   className="mt-4 inline-block text-[color:var(--color-text-primary)] transition-colors duration-150 hover:text-[color:var(--color-proposal)]"
 >
   Ver artículo →

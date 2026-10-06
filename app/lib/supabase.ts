@@ -87,17 +87,17 @@ export async function fetchArticulos(): Promise<ArticuloDB[]> {
 }
 
 /**
- * Obtiene un artículo específico por ID
+ * Obtiene un artículo específico por slug
  */
-export async function fetchArticuloById(id: number): Promise<ArticuloDB | null> {
+export async function fetchArticuloBySlug(slug: string): Promise<ArticuloDB | null> {
   const { data, error } = await supabase
     .from("articulos")
     .select("*")
-    .eq("id", id)
+    .eq("slug", slug)
     .single();
 
   if (error) {
-    console.error(`Error fetching articulo ${id}:`, error);
+    console.error(`Error fetching articulo ${slug}:`, error);
     return null;
   }
 

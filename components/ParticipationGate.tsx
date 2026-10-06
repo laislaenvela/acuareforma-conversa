@@ -16,6 +16,7 @@ type ParticipationGateProps = {
   articleTitle: string;
   nextArticle: {
     id: number;
+    slug: string;
     title: string;
   } | null;
   onCompletionChange?: (completed: boolean) => void;
@@ -183,7 +184,7 @@ const [isSubmitting, setIsSubmitting] =
 
   if (!participant) {
     return (
-      <section className={`mt-12 ${STYLES.card}`}>
+      <section className={`mt-12 ${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
         <h2 className={STYLES.h2}>
           Participación
         </h2>
@@ -204,7 +205,7 @@ const [isSubmitting, setIsSubmitting] =
 if (submitted) {
   return (
     <section className="mt-8 flex min-h-[55vh] items-center justify-center md:mt-12">
-      <div className="w-full max-w-3xl rounded-3xl border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] px-6 py-10 shadow-[10px_10px_0_var(--color-text-primary)] md:px-10 md:py-14">
+      <div className="w-full max-w-3xl rounded-3xl border border-[color:var(--color-border-default)] bg-[color:var(--color-surface-primary)] px-6 py-10 shadow-[10px_10px_0_rgba(127,161,255,0.22)] md:px-10 md:py-14">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-community)] text-[color:var(--color-text-primary)] md:h-16 md:w-16" aria-hidden="true">
           <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 7L9 18l-5-5" />
@@ -223,7 +224,7 @@ if (submitted) {
 
         {nextArticle ? (
           <Link
-            href={`/articulo/${nextArticle.id}`}
+            href={`/articulo/${nextArticle.slug}`}
             className={`${STYLES.buttonPrimary} text-center`}
           >
             Continuar con el siguiente artículo
@@ -262,7 +263,7 @@ if (submitted) {
 }
   return (
     <>
-      <section className={`mt-12 ${STYLES.card}`}>
+      <section className={`mt-12 ${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
 
         <h2 className={STYLES.h2}>
           Mi participación
@@ -293,7 +294,7 @@ if (submitted) {
 
       </section>
 
-      <section className={`mt-10 ${STYLES.card}`}>
+      <section className={`mt-10 ${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
 
         <h2 className={STYLES.h2}>
           ¿Cómo te posicionas?
@@ -315,7 +316,7 @@ if (submitted) {
 
       </section>
 
-      <section className={`mt-10 ${STYLES.card}`}>
+      <section className={`mt-10 ${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
 
         <h2 className={STYLES.h2}>
           Comparte tu aporte

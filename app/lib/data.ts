@@ -1,7 +1,7 @@
 import {
   supabase,
   fetchArticulos,
-  fetchArticuloById,
+  fetchArticuloBySlug,
   fetchArticulosByCapitulo,
   fetchCapitulos,
   fetchCapituloById,
@@ -29,6 +29,8 @@ import type {
   NewContributionRecord,
 } from "./types";
 
+import { sortByArticleNumero } from "./articleOrder";
+
 // ============================================================
 // MAPPERS: BD → Modelo interno
 // ============================================================
@@ -37,6 +39,7 @@ function transformArticulo(dbArticulo: ArticuloDB): Article {
   return {
     id: dbArticulo.id,
     numero: dbArticulo.numero,
+    slug: dbArticulo.slug,
     title: dbArticulo.titulo,
     chapterId: dbArticulo.capitulo_id,
     currentText: dbArticulo.texto_vigente,
@@ -176,13 +179,13 @@ function denormalizeAportePosicion(value: string): string {
 
 export async function getArticles(): Promise<Article[]> {
   const dbArticulos = await fetchArticulos();
-  return dbArticulos.map(transformArticulo);
+  return sortByArticleNumero(dbArticulos.map(transformArticulo));
 }
 
-export async function getArticleById(
-  id: number
+export async function getArticleBySlug(
+  slug: string
 ): Promise<Article | null> {
-  const dbArticulo = await fetchArticuloById(id);
+  const dbArticulo = await fetchArticuloBySlug(slug);
 
   if (!dbArticulo) {
     return null;
@@ -196,7 +199,7 @@ export async function getArticlesByChapter(
 ): Promise<Article[]> {
   const dbArticulos = await fetchArticulosByCapitulo(chapterId);
 
-  return dbArticulos.map(transformArticulo);
+  return sortByArticleNumero(dbArticulos.map(transformArticulo));
 }
 
 // ============================================================
@@ -214,12 +217,13 @@ export async function getChapters(): Promise<Chapter[]> {
   return dbCapitulos.map((dbCapitulo) => {
     const chapter = transformCapitulo(dbCapitulo);
 
-    chapter.articles = articulos
-      .filter((articulo) => articulo.chapterId === chapter.id)
-      .map((articulo) => ({
-        id: articulo.id,
-        title: articulo.title,
-      }));
+    chapter.articles = sortByArticleNumero(
+      articulos.filter((articulo) => articulo.chapterId === chapter.id)
+    ).map((articulo) => ({
+      id: articulo.id,
+      slug: articulo.slug,
+      title: articulo.title,
+    }));
 
     return chapter;
   });
@@ -240,6 +244,7 @@ export async function getChapterById(
 
   chapter.articles = articulos.map((articulo) => ({
     id: articulo.id,
+    slug: articulo.slug,
     title: articulo.title,
   }));
 

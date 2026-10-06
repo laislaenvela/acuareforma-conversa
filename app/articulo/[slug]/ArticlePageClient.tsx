@@ -9,6 +9,7 @@ import type { Article } from "../../lib/types";
 
 type NavArticle = {
   id: number;
+  slug: string;
   title: string;
 };
 
@@ -52,7 +53,7 @@ export default function ArticlePageClient({
             </h2>
 
             <div className={`mt-4 ${STYLES.grid2}`}>
-              <div className={STYLES.card}>
+              <div className={`${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
                 <h3 className={STYLES.h3}>
                   Texto vigente
                 </h3>
@@ -63,7 +64,7 @@ export default function ArticlePageClient({
                 />
               </div>
 
-              <div className={STYLES.card}>
+              <div className={`${STYLES.card} shadow-[6px_6px_0_rgba(127,161,255,0.22)]!`}>
                 <h3 className={STYLES.h3}>
                   Texto propuesto
                 </h3>
@@ -112,7 +113,7 @@ export default function ArticlePageClient({
           <div className="flex flex-col gap-4 text-center">
             {previousArticle ? (
               <Link
-                href={`/articulo/${previousArticle.id}`}
+                href={`/articulo/${previousArticle.slug}`}
                 className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
               >
                 ← Artículo anterior
@@ -131,7 +132,7 @@ export default function ArticlePageClient({
 
             {nextArticle ? (
               <Link
-                href={`/articulo/${nextArticle.id}`}
+                href={`/articulo/${nextArticle.slug}`}
                 className="rounded-lg border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-3 transition-colors duration-150 hover:border-[color:var(--color-primary)]"
               >
                 Artículo siguiente →
